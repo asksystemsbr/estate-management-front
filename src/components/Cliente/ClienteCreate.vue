@@ -161,7 +161,7 @@
         descricao: situacao.descricao
     }));
       } catch (error) {
-        this.handleGlobalError(error, 'Erro ao buscar registro');
+        emit('error', error);
       }
     };
 

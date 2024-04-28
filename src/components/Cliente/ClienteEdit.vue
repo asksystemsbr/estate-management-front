@@ -2,7 +2,7 @@
     <v-container>
       <v-row justify="center">
         <v-col cols="12" sm="8" md="6">
-          <h1>Atualizar Cliente</h1>
+          <h1>Editar Cliente</h1>
           <v-form @submit.prevent="updateClient" ref="form">
             <v-text-field
               v-model="client.nome"
@@ -184,7 +184,7 @@
         descricao: situacao.descricao
     }));
       } catch (error) {
-        this.handleGlobalError(error, 'Erro ao buscar registro');
+        emit('error', error); 
       }
     };
 
