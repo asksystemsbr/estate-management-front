@@ -94,7 +94,7 @@ export default {
         // Armazenar dados de autenticação no localStorage
         localStorage.setItem('accessToken', userData.token);
         localStorage.setItem('userNome', userData.nome);
-        localStorage.setItem('userPermissions', JSON.stringify(userData.permissions)); // Supondo que 'permissions' seja o array de permissões
+        localStorage.setItem('userPermissions', JSON.stringify(userData.permissions)); 
 
 
         snackbar.value.message = `Login bem-sucedido! Nome: ${userData.nome}`;
