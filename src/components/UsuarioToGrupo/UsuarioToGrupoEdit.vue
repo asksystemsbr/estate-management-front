@@ -112,7 +112,7 @@ export default {
     return {
         usuarios: [],
       headers: [
-        { title: 'Descricao', value: 'descricao' , sortable: true },
+        { title: 'Descricao', value: 'nome' , sortable: true },
         { title: 'Excluir', value: 'delete' , sortable: false  }
       ],
       search: '',

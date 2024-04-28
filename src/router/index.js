@@ -5,6 +5,8 @@ import TipoPagamento from '../views/TipoPagamentoView.vue';
 import Funcionario from '../views/FuncionarioView.vue';
 import UsuarioToGrupo from '../views/UsuarioToGrupoView.vue';
 import Permissao from '../views/PermissaoView.vue';
+import Cliente from '../views/ClienteView.vue';
+import GrupoUsuario from '../views/GrupoUsuarioView.vue';
 import Home from '../views/HomeView.vue';
 import auth  from '../auth';
 
@@ -12,8 +14,6 @@ import auth  from '../auth';
 // import FuncionarioCreate from '../components/Funcionario/FuncionarioCreate.vue';
 // import FuncionarioEdit from '../components/Funcionario/FuncionarioEdit.vue';
 // import FuncionarioList from '../components/Funcionario/FuncionarioList.vue'; 
-
-
 
 const routes = [
   {
@@ -61,8 +61,19 @@ const routes = [
     name: 'Permissao',
     component: Permissao,
     meta: { requiresAuth: true }
-  } 
-  
+  },
+  {
+    path: '/cliente',
+    name: 'Cliente',
+    component: Cliente,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/grupousuario',
+    name: 'GrupoUsuario',
+    component: GrupoUsuario,
+    meta: { requiresAuth: true }
+  },
   
   // {
   //   path: '/funcionariocreate',

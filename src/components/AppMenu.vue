@@ -15,9 +15,9 @@
               ></v-list-item>
           </template>
           <!-- Subitens de Cadastros -->
-          <!-- <v-list-item @click="navigateTo('TipoPagamentosList')" link>Tipos de Pagamentos</v-list-item> -->
-          <v-list-item v-if="userCan(['TipoPagamento.Read','TipoPagamento.Write'])" @click="navigateTo('TipoPagamentosList')" link>Tipos de Pagamentos</v-list-item>
-          <v-list-item v-if="userCan(['Funcionarios.Read','Funcionarios.Write'])" @click="navigateTo('FuncionarioList')" link>Funcionario</v-list-item>
+          <v-list-item v-if="userCan(['Cliente.Read','Cliente.Write'])" @click="navigateTo('Cliente')" link>Cliente</v-list-item>
+          <v-list-item v-if="userCan(['Funcionarios.Read','Funcionarios.Write'])" @click="navigateTo('Funcionario')" link>Funcionario</v-list-item>
+          <v-list-item v-if="userCan(['TipoPagamento.Read','TipoPagamento.Write'])" @click="navigateTo('TipoPagamento')" link>Tipos de Pagamentos</v-list-item>          
           
         </v-list-group>      
         
@@ -30,9 +30,9 @@
               ></v-list-item>
           </template>
           <!-- Subitens -->
-          <v-list-item v-if="userCan(['GrupoUsuarios.Read','GrupoUsuarios.Write'])" @click="navigateTo('GrupoUsuarioList')" link>Grupos de Usuários</v-list-item>
-          <v-list-item v-if="userCan(['Usuarios.Read','Usuarios.Write'])" @click="navigateTo('usuariotogrupo')" link>+ Usuário no grupo</v-list-item>
-          <v-list-item v-if="userCan(['Permissoes.Read','Permissoes.Write'])" @click="navigateTo('permissao')" link>Setar Permissões</v-list-item>
+          <v-list-item v-if="userCan(['GrupoUsuarios.Read','GrupoUsuarios.Write'])" @click="navigateTo('GrupoUsuario')" link>Grupos de Usuários</v-list-item>
+          <v-list-item v-if="userCan(['Usuarios.Read','Usuarios.Write'])" @click="navigateTo('UsuarioToGrupo')" link>+ Usuário no grupo</v-list-item>
+          <v-list-item v-if="userCan(['Permissoes.Read','Permissoes.Write'])" @click="navigateTo('Permissao')" link>Setar Permissões</v-list-item>
           
         </v-list-group>  
 
@@ -56,22 +56,24 @@
 <script>
 //import { ref } from 'vue';
 import Home from './Home.vue'; // Importe os componentes correspondentes às rotas
-import TipoPagamentosList from './TipoPagamento/TipoPagamentoList.vue';
-import FuncionarioList from './Funcionario/FuncionarioList.vue';
-import GrupoUsuarioList from './GrupoUsuario/GrupoUsuarioList.vue';
-import usuariotogrupo from '../views/UsuarioToGrupoView.vue';
+import TipoPagamento from '../views/TipoPagamentoView.vue';
+import Funcionario from '../views/FuncionarioView.vue';
+import GrupoUsuario from '../views/GrupoUsuarioView.vue';
+import UsuarioToGrupo from '../views/UsuarioToGrupoView.vue';
 import Permissao from '../views/PermissaoView.vue';
+import Cliente from '../views/ClienteView.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
 
 export default {
   components: {
     Home,
-    TipoPagamentosList,
-    FuncionarioList,
-    GrupoUsuarioList,
-    usuariotogrupo,
+    TipoPagamento,
+    Funcionario,
+    GrupoUsuario,
+    UsuarioToGrupo,
     Permissao,
+    Cliente,
   },
   data() {
     return {
