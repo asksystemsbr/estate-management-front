@@ -18,7 +18,7 @@
           <v-list-item v-if="userCan(['Cliente.Read','Cliente.Write'])" @click="navigateTo('Cliente')" link>Cliente</v-list-item>
           <v-list-item v-if="userCan(['Funcionarios.Read','Funcionarios.Write'])" @click="navigateTo('Funcionario')" link>Funcionario</v-list-item>
           <v-list-item v-if="userCan(['TipoPagamento.Read','TipoPagamento.Write'])" @click="navigateTo('TipoPagamento')" link>Tipos de Pagamentos</v-list-item>          
-          
+          <v-list-item v-if="userCan(['Imovels.Read','Imovels.Write'])" @click="navigateTo('Imovel')" link> Imóveis</v-list-item>  
         </v-list-group>      
         
         <v-list-group value="PermissaoUser">  
@@ -62,6 +62,7 @@ import GrupoUsuario from '../views/GrupoUsuarioView.vue';
 import UsuarioToGrupo from '../views/UsuarioToGrupoView.vue';
 import Permissao from '../views/PermissaoView.vue';
 import Cliente from '../views/ClienteView.vue';
+import Imovel from '../views/ImovelView.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
 
@@ -74,6 +75,7 @@ export default {
     UsuarioToGrupo,
     Permissao,
     Cliente,
+    Imovel,
   },
   data() {
     return {

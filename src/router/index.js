@@ -7,6 +7,7 @@ import UsuarioToGrupo from '../views/UsuarioToGrupoView.vue';
 import Permissao from '../views/PermissaoView.vue';
 import Cliente from '../views/ClienteView.vue';
 import GrupoUsuario from '../views/GrupoUsuarioView.vue';
+import Imovel from '../views/ImovelView.vue';
 import Home from '../views/HomeView.vue';
 import auth  from '../auth';
 
@@ -14,7 +15,6 @@ import auth  from '../auth';
 // import FuncionarioCreate from '../components/Funcionario/FuncionarioCreate.vue';
 // import FuncionarioEdit from '../components/Funcionario/FuncionarioEdit.vue';
 // import FuncionarioList from '../components/Funcionario/FuncionarioList.vue'; 
-
 const routes = [
   {
     path: '/',
@@ -72,6 +72,12 @@ const routes = [
     path: '/grupousuario',
     name: 'GrupoUsuario',
     component: GrupoUsuario,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/imovel',
+    name: 'Imovel',
+    component: Imovel,
     meta: { requiresAuth: true }
   },
   
