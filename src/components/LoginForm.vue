@@ -1,9 +1,9 @@
 <template>
   <v-container class="fill-height" fluid>
     <!-- Se o usuário já estiver autenticado, redirecione para a página inicial -->
-    <template v-if="auth.isAuthenticated()">
+    <!-- <template v-if="auth.isAuthenticated()">
       <router-link :to="{ name: 'AppMenu' }">Ir para o menu</router-link>
-    </template>    
+    </template>     -->
     <v-row justify="center" align="center">
       <v-col cols="12" sm="8" md="4">
         <v-card class="elevation-12" outlined>
@@ -53,11 +53,12 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import {ref } from 'vue';
 import axios from 'axios';
+import auth from '@/auth'; // Importe o serviço de autenticação
 //import apiUrl from '@/config'; // Importar o URL base
 import { useRouter } from 'vue-router';
-import auth from '@/auth'; // Importe o serviço de autenticação
+
 
 export default {
   setup() {
@@ -67,6 +68,7 @@ export default {
       token: '',
       permissions:null
     });
+    auth.logout();
     const showPassword = ref(false);
     //const apiUrlMontada = `${apiUrl}/api/Usuarios/authenticate`;
     const apiUrlMontada = `/api/Usuarios/authenticate`;
@@ -91,22 +93,13 @@ export default {
       try {
         const response = await axios.post(apiUrlMontada, credentials.value);
         const userData = response.data;
-        // Armazenar dados de autenticação no localStorage
-        localStorage.setItem('accessToken', userData.token);
-        localStorage.setItem('userNome', userData.nome);
-        localStorage.setItem('userPermissions', JSON.stringify(userData.permissions)); 
-
-
-        snackbar.value.message = `Login bem-sucedido! Nome: ${userData.nome}`;
-        snackbar.value.color = 'success';
-        snackbar.value.show = true;    
         credentials.value.token = userData.token;        
         credentials.value.permissions = userData.permissions;   
-        console.log(auth);
+        //console.log(auth);
         auth.login(credentials.value);
         // Redirecionar usuário ou salvar dados de login conforme necessário
         router.push({ name: 'AppMenu' });
-        console.log(auth);
+        //console.log(auth);
       } catch (error) {
         console.log(error);
         snackbar.value.message = 'Erro no login: ' + (error.response ? error.response.data : 'Erro no servidor ou na conexão');

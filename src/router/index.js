@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import auth from '@/auth'; // Importe o serviço de autenticação
 import LoginForm from '../views/LoginFormView.vue';
 import AppMenu from '../views/AppMenuView.vue';
 import TipoPagamento from '../views/TipoPagamentoView.vue';
@@ -8,13 +9,16 @@ import Permissao from '../views/PermissaoView.vue';
 import Cliente from '../views/ClienteView.vue';
 import GrupoUsuario from '../views/GrupoUsuarioView.vue';
 import Imovel from '../views/ImovelView.vue';
+import Contrato from '../views/ContratoView.vue';
 import Home from '../views/HomeView.vue';
-import auth  from '../auth';
+
 
 //testes
 // import FuncionarioCreate from '../components/Funcionario/FuncionarioCreate.vue';
 // import FuncionarioEdit from '../components/Funcionario/FuncionarioEdit.vue';
 // import FuncionarioList from '../components/Funcionario/FuncionarioList.vue'; 
+
+
 const routes = [
   {
     path: '/',
@@ -80,6 +84,12 @@ const routes = [
     component: Imovel,
     meta: { requiresAuth: true }
   },
+  {
+    path: '/contrato',
+    name: 'Contrato',
+    component: Contrato,
+    meta: { requiresAuth: true }
+  },
   
   // {
   //   path: '/funcionariocreate',
@@ -114,7 +124,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !auth.isAuthenticated()) {
     console.log('Usuário não autenticado. Redirecionando para /login.');
     // Redireciona para a página de login se a rota requer autenticação e o usuário não está autenticado
-    next('/login');
+    next('/');
   } else {
     console.log('Usuário autenticado. Permitindo acesso à rota.');
     // Permite o acesso à rota

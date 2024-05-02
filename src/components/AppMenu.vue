@@ -19,7 +19,19 @@
           <v-list-item v-if="userCan(['Funcionarios.Read','Funcionarios.Write'])" @click="navigateTo('Funcionario')" link>Funcionario</v-list-item>
           <v-list-item v-if="userCan(['TipoPagamento.Read','TipoPagamento.Write'])" @click="navigateTo('TipoPagamento')" link>Tipos de Pagamentos</v-list-item>          
           <v-list-item v-if="userCan(['Imovels.Read','Imovels.Write'])" @click="navigateTo('Imovel')" link> Imóveis</v-list-item>  
-        </v-list-group>      
+        </v-list-group>     
+        
+        <v-list-group value="Ferramentas">  
+          <template #activator="{ props }">
+              <v-list-item
+                v-bind="props"
+                prepend-icon="mdi-account-circle"
+                title="Ferramentas"
+              ></v-list-item>
+          </template>
+          <!-- Subitens de Ferramentas -->         
+          <v-list-item v-if="userCan(['Document.Read','Document.Write'])" @click="navigateTo('Contrato')" link> Gestão Contratos</v-list-item>  
+        </v-list-group>
         
         <v-list-group value="PermissaoUser">  
           <template #activator="{ props }">
@@ -63,6 +75,7 @@ import UsuarioToGrupo from '../views/UsuarioToGrupoView.vue';
 import Permissao from '../views/PermissaoView.vue';
 import Cliente from '../views/ClienteView.vue';
 import Imovel from '../views/ImovelView.vue';
+import Contrato from '../views/ContratoView.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
 
@@ -76,6 +89,7 @@ export default {
     Permissao,
     Cliente,
     Imovel,
+    Contrato,
   },
   data() {
     return {
@@ -105,6 +119,7 @@ export default {
         permissions = [permissions];
       }
       
+      //console.log("Objeto Auth: ", auth);
         // Debug: log the permissions being checked
         //console.log("Checking permissions for: ", permissions);
 
@@ -119,6 +134,7 @@ export default {
     },
   },
 };
+//console.log('Objeto Auth: ', auth);
 </script>
 
 <style>
