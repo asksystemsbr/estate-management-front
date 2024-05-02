@@ -10,6 +10,7 @@ import Cliente from '../views/ClienteView.vue';
 import GrupoUsuario from '../views/GrupoUsuarioView.vue';
 import Imovel from '../views/ImovelView.vue';
 import Contrato from '../views/ContratoView.vue';
+import Fiador from '../views/FiadorView.vue';
 import Home from '../views/HomeView.vue';
 
 
@@ -88,6 +89,12 @@ const routes = [
     path: '/contrato',
     name: 'Contrato',
     component: Contrato,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/fiador',
+    name: 'Fiador',
+    component: Fiador,
     meta: { requiresAuth: true }
   },
   

@@ -16,6 +16,7 @@
           </template>
           <!-- Subitens de Cadastros -->
           <v-list-item v-if="userCan(['Cliente.Read','Cliente.Write'])" @click="navigateTo('Cliente')" link>Cliente</v-list-item>
+          <v-list-item v-if="userCan(['Fiador.Read','Fiador.Write'])" @click="navigateTo('Fiador')" link>Fiador</v-list-item>
           <v-list-item v-if="userCan(['Funcionarios.Read','Funcionarios.Write'])" @click="navigateTo('Funcionario')" link>Funcionario</v-list-item>
           <v-list-item v-if="userCan(['TipoPagamento.Read','TipoPagamento.Write'])" @click="navigateTo('TipoPagamento')" link>Tipos de Pagamentos</v-list-item>          
           <v-list-item v-if="userCan(['Imovels.Read','Imovels.Write'])" @click="navigateTo('Imovel')" link> Imóveis</v-list-item>  
@@ -76,6 +77,7 @@ import Permissao from '../views/PermissaoView.vue';
 import Cliente from '../views/ClienteView.vue';
 import Imovel from '../views/ImovelView.vue';
 import Contrato from '../views/ContratoView.vue';
+import Fiador from '../views/FiadorView.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
 
@@ -90,6 +92,7 @@ export default {
     Cliente,
     Imovel,
     Contrato,
+    Fiador,
   },
   data() {
     return {
