@@ -3,6 +3,8 @@ import { ref } from 'vue';
 const imovel = ref({
   id: 0,
   clienteId: 0,
+  fiadorId: 0,
+  locadorId: 0,
   dataVencimento: null,
   valor: 0.00,
   reajuste: null,
@@ -21,6 +23,8 @@ function clearImovel() {
   imovel.value = {
     id: 0,
     clienteId: 0,
+    fiadorId: 0,
+    locadorId: 0,
     dataVencimento: null,
     valor: 0.00,
     reajuste: null,

@@ -29,7 +29,8 @@ const locador = ref({
   dias_pgto: '',
   limite_saldo: 0.0,
   obs: '',
-  data_nascimento: null
+  data_nascimento: null,
+  codigo_fiador: ''
 });
 
 function clearlocador() {
@@ -62,7 +63,8 @@ function clearlocador() {
     dias_pgto: '',
     limite_saldo: 0.0,
     obs: '',
-    data_nascimento: null
+    data_nascimento: null,
+    codigo_fiador: ''
   };
 }
 

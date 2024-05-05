@@ -30,8 +30,8 @@
       >
         <template v-slot:item="{ item, index }">
           <tr :style="{ backgroundColor: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0' }">
+            <td class="text-left">{{ item.codigo_fiador }}</td>
             <td class="text-left">{{ item.nome }}</td>
-            <td class="text-left">{{ item.email }}</td>
             <td class="text-left">{{ item.celular }}</td>
             <td class="text-center">
               <v-btn color="blue" icon @click="editFiador(item.id)">
@@ -115,8 +115,8 @@ export default {
     return {
       fiadores: [],
       headers: [
+      { title: 'Código', value: 'codigo_fiador' , sortable: true },
         { title: 'Nome', value: 'nome' , sortable: true },
-        { title: 'E-mail', value: 'email' , sortable: true },
         { title: 'Celular', value: 'celular' , sortable: true },
         { title: 'Editar', value: 'edit' , sortable: false },
         { title: 'Excluir', value: 'delete' , sortable: false  }

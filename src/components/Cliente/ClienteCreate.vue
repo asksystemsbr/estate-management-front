@@ -5,6 +5,12 @@
           <h1>Novo Cliente</h1>
           <v-form @submit.prevent="createClient" ref="form">
             <v-text-field
+              v-model="client.codigo_cliente"
+              label="Código"
+              required
+            ></v-text-field>
+
+            <v-text-field
               v-model="client.nome"
               label="Nome"
               required

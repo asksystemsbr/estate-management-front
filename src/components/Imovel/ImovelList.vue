@@ -31,6 +31,8 @@
         <template v-slot:item="{ item, index }">
           <tr :style="{ backgroundColor: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0' }">
             <td class="text-left">{{ item.cliente.nome }}</td>
+            <td class="text-left">{{ item.locador.nome }}</td>
+            <td class="text-left">{{ item.fiador.nome }}</td>
             <td class="text-left">{{ item.logradouro }}</td>
             <td class="text-left">{{ item.numero }}</td>
             <td class="text-center">
@@ -115,7 +117,9 @@ export default {
     return {
       imoveis: [],
       headers: [
-        { title: 'Proprietário', value: 'cliente.nome' , sortable: true },
+        { title: 'Locatário', value: 'cliente.nome' , sortable: true },
+        { title: 'Locador', value: 'locador.nome' , sortable: true },
+        { title: 'Fiador', value: 'fiador.nome' , sortable: true },
         { title: 'Logradouro', value: 'logradouro' , sortable: true },
         { title: 'Número', value: 'numero' , sortable: true },
         { title: 'Editar', value: 'edit' , sortable: false },

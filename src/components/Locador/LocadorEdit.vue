@@ -2,107 +2,108 @@
     <v-container>
       <v-row justify="center">
         <v-col cols="12" sm="8" md="6">
-          <h1>Editar Fiador</h1>
-          <v-form @submit.prevent="updateFiador" ref="form">
+          <h1>Editar Locador</h1>
+          <v-form @submit.prevent="updateLocador" ref="form">
             <v-text-field
-              v-model="fiador.codigo_fiador"
+              v-model="locador.codigo_locador"
               label="Código"
               required
             ></v-text-field>
+
             <v-text-field
-              v-model="fiador.nome"
+              v-model="locador.nome"
               label="Nome"
               required
             ></v-text-field>
   
             <v-text-field
-            v-model="fiador.email"
+            v-model="locador.email"
             label="E-mail"
             required
             :rules="[validateEmail]"
           ></v-text-field>
 
           <v-text-field
-            v-model="fiador.cpf_cnpj"
+            v-model="locador.cpf_cnpj"
             label="CPF/CNPJ"
             required
             @input="formatCpfCnpj"
           ></v-text-field>
 
           <v-select
-            v-model="fiador.sexo"
+            v-model="locador.sexo"
             :items="['Masculino', 'Feminino']"
             label="Sexo"
             required
           ></v-select>
 
           <v-text-field
-            v-model="fiador.logradouro"
+            v-model="locador.logradouro"
             label="Logradouro"
             required
           ></v-text-field>
 
           <v-text-field
-            v-model="fiador.numero"
+            v-model="locador.numero"
             label="Número"
             required
           ></v-text-field>
 
           <v-text-field
-            v-model="fiador.complemento"
+            v-model="locador.complemento"
             label="Complemento"
           ></v-text-field>
 
           <v-text-field
-            v-model="fiador.cep"
+            v-model="locador.cep"
             label="CEP"
             required
             @input="formatCep"
           ></v-text-field>
 
           <v-text-field
-            v-model="fiador.bairro"
+            v-model="locador.bairro"
             label="Bairro"
             required
           ></v-text-field>
 
           <v-text-field
-            v-model="fiador.cidade"
+            v-model="locador.cidade"
             label="Cidade"
             required
           ></v-text-field>
 
           <v-text-field
-            v-model="fiador.uf"
+            v-model="locador.uf"
             label="UF"
             required
             maxlength="2"
           ></v-text-field>
 
           <v-text-field
-            v-model="fiador.fone1"
+            v-model="locador.fone1"
             label="Telefone"
             @input="formatTelefone"
           ></v-text-field>
 
           <v-text-field
-            v-model="fiador.celular"
+            v-model="locador.celular"
             label="Celular"
             @input="formatCelular"
           ></v-text-field>
 
           <v-text-field
-            v-model="fiador.contato"
+            v-model="locador.contato"
             label="Contato"
           ></v-text-field>
 
           <v-textarea
-            v-model="fiador.obs"
+            v-model="locador.obs"
             label="Observações"
           ></v-textarea>
 
           <v-select
-            v-model="fiador.id_situacao_cliente"
+            v-model="locador.id_situacao_cliente"
             :items="situacoesCliente"
             item-title="descricao"
             item-value="id"
@@ -134,7 +135,7 @@
   import { ref,onMounted,nextTick  } from 'vue';
   import axios from 'axios';
   
-  import {fiador,clearFiador} from '@/model/fiador.js';
+  import {locador,clearlocador} from '@/model/locador.js';
   
   export default {
     props: {
@@ -148,27 +149,27 @@
       const situacoesCliente=ref([]);
 
 
-      const fetchFiador = async () => {
+      const fetchLocador = async () => {
       try {
         await fetchSituacaoCliente();
         console.log('Situações Cliente:', situacoesCliente.value);
-        const response = await axios.get(`/api/Fiador/${props.id}`);
-        console.log('Dados do Fiador Recebidos:', response.data);
-        fiador.value = response.data;
+        const response = await axios.get(`/api/Locador/${props.id}`);
+        console.log('Dados do Locador Recebidos:', response.data);
+        locador.value = response.data;
 
         await nextTick(); // Aguarda a atualização do DOM
-        fiador.value.id_situacao_cliente = response.data.iD_SITUACAO_CLIENTE;
-        fiador.value.cpf_cnpj = response.data.cpF_CNPJ;
+        locador.value.id_situacao_cliente = response.data.iD_SITUACAO_CLIENTE;
+        locador.value.cpf_cnpj = response.data.cpF_CNPJ;
         //console.log('ID Situação Cliente:', response.data.iD_SITUACAO_CLIENTE);
       } catch (error) {
         emit('error', error); 
       }
     };
 
-    const updateFiador = async () => {
+    const updateLocador = async () => {
       try {
-        await axios.put(`/api/Fiador/${fiador.value.id}`, fiador.value);
-        clearFiador();
+        await axios.put(`/api/Locador/${locador.value.id}`, locador.value);
+        clearlocador();
         emit('update');
       } catch (error) {
         emit('error', error); 
@@ -179,7 +180,7 @@
       emit('close');
     };
 
-    onMounted(fetchFiador);     
+    onMounted(fetchLocador);     
 
       const fetchSituacaoCliente =async () => {
       try {
@@ -195,20 +196,20 @@
 
       const formatTelefone = () => {
               // Aplica formatação automática para telefone (ex: (99) 9999-9999)
-          let value = fiador.value.fone1;
+          let value = locador.value.fone1;
           value = value.replace(/\D/g, ''); // Remove caracteres não numéricos
           value = value.replace(/^(\d{2})(\d)/g, '($1) $2'); // Adiciona parênteses no DDD
           value = value.replace(/(\d)(\d{4})$/, '$1-$2'); // Adiciona hífen entre os últimos dígitos
-          fiador.value.fone1 = value;
+          locador.value.fone1 = value;
       };
   
       const formatCelular = () => {
             // Aplica formatação automática para celular (ex: (99) 99999-9999)
-          let value = fiador.value.celular;
+          let value = locador.value.celular;
           value = value.replace(/\D/g, ''); // Remove caracteres não numéricos
           value = value.replace(/^(\d{2})(\d)/g, '($1) $2'); // Adiciona parênteses no DDD
           value = value.replace(/(\d)(\d{5})$/, '$1-$2'); // Adiciona hífen entre os últimos dígitos
-          fiador.value.celular = value;
+          locador.value.celular = value;
       };
   
       const validateEmail = (value) => {
@@ -217,7 +218,7 @@
         return pattern.test(value) || 'E-mail inválido';
       };
       const formatCpfCnpj = () => {
-            let value = fiador.value.cpf_cnpj.replace(/\D/g, ''); // Remove caracteres não numéricos
+            let value = locador.value.cpf_cnpj.replace(/\D/g, ''); // Remove caracteres não numéricos
 
             if (value.length <= 11) { // CPF
                 value = value.replace(/(\d{3})(\d)/, '$1.$2');
@@ -230,20 +231,20 @@
                 value = value.replace(/(\d{4})(\d)/, '$1-$2');
             }
 
-            fiador.value.cpf_cnpj = value;
+            locador.value.cpf_cnpj = value;
         };
 
         const formatCep = () => {
-            let value = fiador.value.cep.replace(/\D/g, ''); // Remove caracteres não numéricos
+            let value = locador.value.cep.replace(/\D/g, ''); // Remove caracteres não numéricos
             value = value.replace(/^(\d{5})(\d)/, '$1-$2');
-            fiador.value.cep = value;
+            locador.value.cep = value;
         };
         
       return {
-        fiador,
-        clearFiador,
-        fetchFiador,
-        updateFiador,
+        locador,
+        clearlocador,
+        fetchLocador,
+        updateLocador,
         closeModal,
         form,
         formatTelefone,

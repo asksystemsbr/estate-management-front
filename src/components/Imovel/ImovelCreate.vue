@@ -10,7 +10,25 @@
                 :items="clienteCadastrado"
                 item-title="nome"
                 item-value="id"
-                label="Cliente"
+                label="Locatario"
+                required
+            ></v-select>  
+
+            <v-select
+                v-model="imovel.locadorId"
+                :items="locadorCadastrado"
+                item-title="nome"
+                item-value="id"
+                label="Locador"
+                required
+            ></v-select>  
+
+            <v-select
+                v-model="imovel.fiadorId"
+                :items="fiadorCadastrado"
+                item-title="nome"
+                item-value="id"
+                label="Fiador"
                 required
             ></v-select>  
 
@@ -149,6 +167,8 @@
       const form = ref(null);
       const situacoesCliente=ref([]);
       const clienteCadastrado=ref([]);
+      const fiadorCadastrado=ref([]);
+      const locadorCadastrado=ref([]);
       const menuOpen  = ref(false);
 
       const createImovel = async () => {
@@ -188,6 +208,32 @@
       }
     };
 
+    const fetchFiador =async () => {
+      try {
+            const response = await axios.get(`/api/Fiador`);
+            fiadorCadastrado.value = response.data.map(fiador => ({
+            id: fiador.id,
+            nome: fiador.nome
+        }));
+
+      } catch (error) {
+        emit('error', error);
+      }
+    };
+
+    const fetchLocador =async () => {
+      try {
+            const response = await axios.get(`/api/Locador`);
+            locadorCadastrado.value = response.data.map(locador => ({
+            id: locador.id,
+            nome: locador.nome
+        }));
+
+      } catch (error) {
+        emit('error', error);
+      }
+    };
+
     const limpar = () => {
         form.value.resetValidation();
         clearImovel();
@@ -218,6 +264,8 @@
     const initialize = async () => {
       await fetchSituacaoCliente();
       await fetchCliente();
+      await fetchFiador();
+      await fetchLocador();
       limpar();
     };
   
@@ -232,6 +280,8 @@
         form,
         formatCep,
         clienteCadastrado,
+        fiadorCadastrado,
+        locadorCadastrado,
         situacoesCliente,
         formattedDate,
         menuOpen,

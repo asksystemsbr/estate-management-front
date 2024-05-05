@@ -5,6 +5,12 @@
           <h1>Novo Fiador</h1>
           <v-form @submit.prevent="createFiador" ref="form">
             <v-text-field
+              v-model="fiador.codigo_fiador"
+              label="Código"
+              required
+            ></v-text-field>
+            
+            <v-text-field
               v-model="fiador.nome"
               label="Nome"
               required

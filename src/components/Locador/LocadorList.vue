@@ -3,10 +3,10 @@
       <!-- Row for title and button -->
       <v-row align="center" justify="space-between">
         <v-col cols="auto">
-          <h1>Clientes</h1>
+          <h1>Locadores</h1>
         </v-col>
         <v-col cols="auto">
-          <v-btn color="primary" @click="showAddModal = true">Novo Cliente</v-btn>
+          <v-btn color="primary" @click="showAddModal = true">Novo Locador</v-btn>
         </v-col>
       </v-row>
       <br><br>
@@ -22,7 +22,7 @@
   
       <!-- Employee data table -->
       <v-data-table
-        :items="clientes"
+        :items="locadores"
         :headers="headers"
         :search="search"
         item-key="id"
@@ -30,11 +30,11 @@
       >
         <template v-slot:item="{ item, index }">
           <tr :style="{ backgroundColor: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0' }">
-            <td class="text-left">{{ item.codigo_cliente }}</td>
-            <td class="text-left">{{ item.nome }}</td>
+            <td class="text-left">{{ item.codigo_locador }}</td>
+            <td class="text-left">{{ item.nome }}</td>            
             <td class="text-left">{{ item.celular }}</td>
             <td class="text-center">
-              <v-btn color="blue" icon @click="editClient(item.id)">
+              <v-btn color="blue" icon @click="editLocador(item.id)">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
             </td>
@@ -50,8 +50,8 @@
       <!-- Modals for Edit and Add -->
       <v-dialog v-model="showEditModal" max-width="600px">
         <v-card>
-          <client-edit
-            :id="selectedClientId"
+          <locador-edit
+            :id="selectedLocadorId"
             @update="handleUpdate"
             @error="handleError"
             @close="showEditModal = false"
@@ -61,7 +61,7 @@
   
       <v-dialog v-model="showAddModal" max-width="700px">
         <v-card>
-          <client-create
+          <locador-create
             @update="handleUpdate"
             @error="handleError"
             @close="showAddModal = false"
@@ -73,11 +73,11 @@
       <v-dialog v-model="showDeleteConfirm" persistent>
         <v-card>
           <v-card-title class="text-h5">Confirmação</v-card-title>
-          <v-card-text>Tem certeza de que deseja excluir este cliente?</v-card-text>
+          <v-card-text>Tem certeza de que deseja excluir este locador?</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1"  @click="cancelDelete">Cancelar</v-btn>
-            <v-btn color="red darken-1"  @click="deleteClient(currentDeleteId)">Excluir</v-btn>
+            <v-btn color="red darken-1"  @click="deleteLocador(currentDeleteId)">Excluir</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -101,21 +101,21 @@
 
   <script>
 import axios from 'axios';
-import ClientEdit from './ClienteEdit.vue';
-import ClientCreate from './ClienteCreate.vue';
+import LocadorEdit from './LocadorEdit.vue';
+import LocadorCreate from './LocadorCreate.vue';
 import errorHandling from '@/utilities/errorHandling';
 
 export default {
   components: {
-    ClientEdit,
-    ClientCreate
+    LocadorEdit,
+    LocadorCreate
   },
   mixins: [errorHandling],
   data() {
     return {
-      clientes: [],
+      locadores: [],
       headers: [
-      { title: 'Código', value: 'codigo_cliente' , sortable: true },
+      { title: 'Código', value: 'codigo_locador' , sortable: true },
         { title: 'Nome', value: 'nome' , sortable: true },        
         { title: 'Celular', value: 'celular' , sortable: true },
         { title: 'Editar', value: 'edit' , sortable: false },
@@ -126,7 +126,7 @@ export default {
       showAddModal: false,
       showDeleteConfirm: false,
       currentDeleteId: null,      
-      selectedClientId: 0,
+      selectedLocadorId: 0,
       snackbar: {
         show: false,
         message: '',
@@ -136,22 +136,22 @@ export default {
     };
   },
   created() {
-    this.fetchClients();
+    this.fetchLocadores();
   },
   methods: {
-    async fetchClients() {
+    async fetchLocadores() {
       try {
-        const response = await axios.get('/api/Cliente');
-        this.clientes = response.data;
+        const response = await axios.get('/api/Locador');
+        this.locadores = response.data;
       } catch (error) {
         this.handleGlobalError(error, 'Erro ao buscar registro');
       }
     },
-    async deleteClient(id) {
+    async deleteLocador(id) {
       try {        
-        await axios.delete(`/api/Cliente/${id}`);         
+        await axios.delete(`/api/Locador/${id}`);         
         this.showSnackBar(`Registro excluído com Sucesso`,'success');      
-        this.fetchClients();
+        this.fetchLocadores();
         this.cancelDelete();
       } catch (error) {
         this.handleGlobalError(error, 'Erro ao excluir registro');
@@ -159,8 +159,8 @@ export default {
         this.cancelDelete();
       }
     },
-    editClient(id) {
-      this.selectedClientId = id;
+    editLocador(id) {
+      this.selectedLocadorId = id;
       this.showEditModal = true;
     },
     confirmDelete(id,idUsuario) {
@@ -179,7 +179,7 @@ export default {
 
       this.showSnackBar(`Registro Salvo com Sucesso`,'success');
 
-      this.fetchClients();
+      this.fetchLocadores();
     },
     handleError(error) {
       this.showEditModal = false;
@@ -192,7 +192,7 @@ export default {
       {
         this.handleGlobalError(error, 'Erro ao salvar registro');
       }
-      this.fetchClients();
+      this.fetchLocadores();
     },
     showSnackBar(message,color)
     {

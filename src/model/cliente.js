@@ -43,7 +43,8 @@ const client = ref({
   funcionario_id: null,
   limite_saldo: 0,
   obs: '',
-  data_nascimento: null
+  data_nascimento: null,
+  codigo_cliente: '',
 });
 
 function clearClient() {
@@ -90,6 +91,7 @@ function clearClient() {
   client.value.limite_saldo = 0;
   client.value.obs = '';
   client.value.data_nascimento = null;
+  client.value.codigo_cliente = '';
 }
 
 export { client, clearClient };

@@ -10,9 +10,27 @@
               :items="clienteCadastrado"
               item-title="nome"
               item-value="id"
-              label="Cliente"
+              label="Locatario"
               required
           ></v-select>  
+
+          <v-select
+                v-model="imovel.locadorId"
+                :items="locadorCadastrado"
+                item-title="nome"
+                item-value="id"
+                label="Locador"
+                required
+            ></v-select>  
+
+            <v-select
+                v-model="imovel.fiadorId"
+                :items="fiadorCadastrado"
+                item-title="nome"
+                item-value="id"
+                label="Fiador"
+                required
+            ></v-select>  
 
           <v-text-field
             v-model="imovel.logradouro"
@@ -148,6 +166,8 @@
       const form = ref(null);
       const situacoesCliente=ref([]);
       const clienteCadastrado=ref([]);
+      const fiadorCadastrado=ref([]);
+      const locadorCadastrado=ref([]);      
       const menuOpen  = ref(false);
 
       const fetchImovel = async () => {
@@ -155,6 +175,8 @@
         await fetchSituacaoCliente();
         console.log('Situações Cliente:', situacoesCliente.value);
         await fetchCliente();
+        await fetchFiador();
+        await fetchLocador();
         console.log('Cliente:', clienteCadastrado.value);
         const response = await axios.get(`/api/Imovels/${props.id}`);
         console.log('Dados do imovel Recebidos:', response.data);
@@ -162,7 +184,9 @@
 
         await nextTick(); // Aguarda a atualização do DOM
         imovel.value.situacaoId = response.data.iD_SITUACAO_CLIENTE;
-        imovel.value.situacaoId = response.data.clienteId;
+        imovel.value.clienteId = response.data.clienteId;
+        imovel.value.fiadorId = response.data.fiadorId;
+        imovel.value.locadorId = response.data.locadorId;
         imovel.value.dataVencimento =new Date(response.data.dataVencimento);
         console.log ('Imovel data vencimento:', imovel.value.dataVencimento);
         //console.log('ID Situação Cliente:', response.data.iD_SITUACAO_CLIENTE);
@@ -209,7 +233,31 @@
         emit('error', error); 
       }
     };
-  
+    const fetchFiador =async () => {
+      try {
+            const response = await axios.get(`/api/Fiador`);
+            fiadorCadastrado.value = response.data.map(fiador => ({
+            id: fiador.id,
+            nome: fiador.nome
+        }));
+
+      } catch (error) {
+        emit('error', error);
+      }
+    };
+
+    const fetchLocador =async () => {
+      try {
+            const response = await axios.get(`/api/Locador`);
+            locadorCadastrado.value = response.data.map(locador => ({
+            id: locador.id,
+            nome: locador.nome
+        }));
+
+      } catch (error) {
+        emit('error', error);
+      }
+    };
 
 
         const formatCep = () => {
@@ -259,6 +307,8 @@
         fetchSituacaoCliente,
         situacoesCliente,
         clienteCadastrado,
+        fiadorCadastrado,
+        locadorCadastrado,
         formattedDate,
         menuOpen,
         handleDateChange,

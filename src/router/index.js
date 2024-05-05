@@ -11,6 +11,7 @@ import GrupoUsuario from '../views/GrupoUsuarioView.vue';
 import Imovel from '../views/ImovelView.vue';
 import Contrato from '../views/ContratoView.vue';
 import Fiador from '../views/FiadorView.vue';
+import Locador from '../views/LocadorView.vue';
 import Home from '../views/HomeView.vue';
 
 
@@ -95,6 +96,12 @@ const routes = [
     path: '/fiador',
     name: 'Fiador',
     component: Fiador,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/locador',
+    name: 'Locador',
+    component: Locador,
     meta: { requiresAuth: true }
   },
   
