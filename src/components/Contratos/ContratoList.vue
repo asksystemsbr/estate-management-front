@@ -108,12 +108,12 @@
       >
         <template v-slot:item="{ item, index }">
           <tr :style="{ backgroundColor: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0' }">
+            <td class="text-left">{{ item.codigoImovel }}</td>
             <td class="text-left">{{ item.cliente.nome }}</td>
             <td class="text-left">{{ item.locador.nome }}</td>
             <td class="text-left">{{ item.logradouro }}</td>
-            <td class="text-left">{{ item.numero }}</td>
             <td class="text-left">{{ item.valor }}</td>
-            <td class="text-left">{{ item.reajuste }}</td>
+            <td class="text-left">{{ item.isFiador ? 'Sim' :'Não' }}</td>
             <td class="text-left">{{ item.dataVencimento }}</td>
             <td class="text-center">
               <v-btn color="blue" icon @click="getContract(item.id)">
@@ -121,7 +121,7 @@
               </v-btn>
             </td>
             <td class="text-center">
-              <v-btn color="green" icon @click="confirmDelete(item.id)">
+              <v-btn color="green" icon @click="getReceipt(item.id)">
                 <v-icon>mdi-currency-usd</v-icon>
               </v-btn>
             </td>
@@ -204,12 +204,12 @@ export default {
     return {
       imoveis: [],
       headers: [
-        { title: 'Locatário', value: 'cliente.nome' , sortable: true },
+      { title: 'Cód', value: 'codigoImovel' , sortable: true },  
+      { title: 'Locatário', value: 'cliente.nome' , sortable: true },
         { title: 'Locador', value: 'locador.nome' , sortable: true },
         { title: 'Logradouro', value: 'logradouro' , sortable: true },
-        { title: 'Número', value: 'numero' , sortable: true },
         { title: 'Valor', value: 'valor' , sortable: true },
-        { title: 'Reajuste', value: 'reajuste' , sortable: true },
+        { title: 'Fiador', value: 'isFiador' , sortable: true },
         { title: 'Vencimento', value: 'dataVencimento' , sortable: true },
         { title: 'Gerar', value: 'edit' , sortable: false },
         { title: 'Recibo', value: 'delete' , sortable: false  }
@@ -299,7 +299,7 @@ export default {
     },
     async getContract(id) {
       try {
-            const response = await axios.get(`/api/Document/${id}`, {
+            const response = await axios.get(`/api/Document/gerarcontrato/${id}`, {
               responseType: 'blob' // Importante para tratar a resposta como um Blob
             });
 
@@ -324,10 +324,32 @@ export default {
         this.handleGlobalError(error, 'Erro ao gerar documento');
       }
     },
-    confirmDelete(id,idUsuario) {
-      this.currentDeleteId = id;
-      this.currentDeleteUserId = idUsuario;
-      this.showDeleteConfirm = true;
+    async getReceipt(id) {
+      try {
+            const response = await axios.get(`/api/Document/gerarrecibo/${id}`, {
+              responseType: 'blob' // Importante para tratar a resposta como um Blob
+            });
+
+                // Extrair o nome do arquivo do cabeçalho de disposição de conteúdo
+            const contentDisposition = response.headers['content-disposition'];
+            let filename = 'Recibo.docx'; // Nome padrão se o cabeçalho não estiver presente
+            if (contentDisposition) {
+              const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+              if (filenameMatch.length > 1) {
+                filename = filenameMatch[1];
+              }
+            }
+
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', filename); // Define o nome do arquivo
+            document.body.appendChild(link);
+            link.click();
+            this.showSnackBar(`Recibo gerado com Sucesso`,'success');    
+      } catch (error) {
+        this.handleGlobalError(error, 'Erro ao gerar documento');
+      }
     },
     cancelDelete() {
       this.showDeleteConfirm = false;

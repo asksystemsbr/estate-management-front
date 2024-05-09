@@ -3,7 +3,6 @@ import { ref } from 'vue';
 const imovel = ref({
   id: 0,
   clienteId: 0,
-  fiadorId: 0,
   locadorId: 0,
   dataVencimento: null,
   valor: 0.00,
@@ -16,14 +15,26 @@ const imovel = ref({
   cidade: '',
   uf: '',
   situacaoId: 0,
-  obs: ''
+  obs: '',
+  DataEntrada: null,
+  SeguroFianca: null,
+  ModalidadeSeguro: null,
+  NumeroApolice: null,
+  DataInicioSeguro: null,
+  HoraInicioSeguro: null,
+  DataFimSeguro: null,
+  CodigoImovel: null,
+  isFiador: false,
+  diaVencimento: null,
+  finalidade: '',
+  ramoSeguro: ''
+  //fiadores: []
 });
 
 function clearImovel() {
   imovel.value = {
     id: 0,
     clienteId: 0,
-    fiadorId: 0,
     locadorId: 0,
     dataVencimento: null,
     valor: 0.00,
@@ -36,7 +47,20 @@ function clearImovel() {
     cidade: '',
     uf: '',
     situacaoId: 0,
-    obs: ''
+    obs: '',
+    dataEntrada: null,
+    seguroFianca: null,
+    modalidadeSeguro: null,
+    numeroApolice: null,
+    dataInicioSeguro: null,
+    horaInicioSeguro: null,
+    dataFimSeguro: null,
+    codigoImovel: null,
+    isFiador: false,
+    diaVencimento: null,
+    finalidade: '',
+    ramoSeguro: ''
+    //fiadores: []
   };
 }
 

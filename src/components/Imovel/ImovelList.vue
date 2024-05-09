@@ -30,11 +30,12 @@
       >
         <template v-slot:item="{ item, index }">
           <tr :style="{ backgroundColor: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0' }">
+            <td class="text-left">{{ item.codigoImovel }}</td>
             <td class="text-left">{{ item.cliente.nome }}</td>
             <td class="text-left">{{ item.locador.nome }}</td>
-            <td class="text-left">{{ item.fiador.nome }}</td>
             <td class="text-left">{{ item.logradouro }}</td>
             <td class="text-left">{{ item.numero }}</td>
+            <td class="text-left">{{ item.isFiador ? 'Sim' :'Não' }}</td>
             <td class="text-center">
               <v-btn color="blue" icon @click="editImovel(item.id)">
                 <v-icon>mdi-pencil</v-icon>
@@ -50,7 +51,7 @@
       </v-data-table>
   
       <!-- Modals for Edit and Add -->
-      <v-dialog v-model="showEditModal" max-width="600px">
+      <v-dialog v-model="showEditModal" max-width="700px">
         <v-card>
           <imovel-edit
             :id="selectedImovelId"
@@ -61,7 +62,7 @@
         </v-card>
       </v-dialog>
   
-      <v-dialog v-model="showAddModal" max-width="700px">
+      <v-dialog v-model="showAddModal" max-width="70px">
         <v-card>
           <imovel-create
             @update="handleUpdate"
@@ -79,7 +80,7 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1"  @click="cancelDelete">Cancelar</v-btn>
-            <v-btn color="red darken-1"  @click="deleteClient(currentDeleteId)">Excluir</v-btn>
+            <v-btn color="red darken-1"  @click="deleteImovel(currentDeleteId)">Excluir</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -116,12 +117,13 @@ export default {
   data() {
     return {
       imoveis: [],
-      headers: [
-        { title: 'Locatário', value: 'cliente.nome' , sortable: true },
+      headers: [      
+      { title: 'Cód Imóvel', value: 'codigoImovel' , sortable: true },  
+      { title: 'Locatário', value: 'cliente.nome' , sortable: true },
         { title: 'Locador', value: 'locador.nome' , sortable: true },
-        { title: 'Fiador', value: 'fiador.nome' , sortable: true },
         { title: 'Logradouro', value: 'logradouro' , sortable: true },
         { title: 'Número', value: 'numero' , sortable: true },
+        { title: 'Fiador', value: 'isFiador' , sortable: true },
         { title: 'Editar', value: 'edit' , sortable: false },
         { title: 'Excluir', value: 'delete' , sortable: false  }
       ],
@@ -153,13 +155,13 @@ export default {
     },
     async deleteImovel(id) {
       try {        
-        await axios.delete(`/api/Imovels/${id}`);         
+        await axios.delete(`/api/Imovels/deleteimovelfiador/${id}`);   
+        await axios.delete(`/api/Imovels/${id}`);                  
         this.showSnackBar(`Registro excluído com Sucesso`,'success');      
         this.fetchImoveis();
         this.cancelDelete();
       } catch (error) {
         this.handleGlobalError(error, 'Erro ao excluir registro');
-        this.cancelDelete();
         this.cancelDelete();
       }
     },
