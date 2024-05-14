@@ -61,8 +61,24 @@
     </v-app-bar>
 
     <v-main>
+      <v-container v-if="!currentComponent">
+        <v-row>
+          <v-col cols="12" sm="6">
+            <h2>Contratos (15 dias)</h2>
+            <v-btn color="blue" @click="navigateTo('Contrato/15')">Ver 15
+            </v-btn>
+            <contrato-list :days="15" />
+          </v-col>
+          <v-col cols="12" sm="6">
+            <h2>Contratos (30 dias)</h2>
+            <v-btn color="blue" @click="navigateTo('Contrato/30')">Ver 30
+            </v-btn>
+            <contrato-list :days="30" />
+          </v-col>
+        </v-row>
+      </v-container>
       <!-- Renderiza o componente correspondente à rota atual dentro do mdiform -->
-      <component :is="currentComponent" v-if="currentComponent" @close="currentComponent = null" />
+      <component :is="currentComponent" v-bind="currentParams" v-if="currentComponent" @close="currentComponent = null" />
     </v-main>
   </v-app>
 </template>
@@ -80,6 +96,7 @@ import Imovel from '../views/ImovelView.vue';
 import Contrato from '../views/ContratoView.vue';
 import Fiador from '../views/FiadorView.vue';
 import Locador from '../views/LocadorView.vue';
+import ContratoList from './Contratos/ContratoList.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
 
@@ -96,19 +113,30 @@ export default {
     Contrato,
     Fiador,
     Locador,
+    ContratoList,
   },
   data() {
     return {
       drawer: false,
       cadastrosExpanded: false,
       currentComponent: null, // Estado para controlar o componente dentro do mdiform
+      currentParams: {},
+      currentComponentKey: 0, // Key para forçar a atualização do componente
     };
   },
   methods: {
     navigateTo(routeName) {
       //this.$router.push({ name: routeName });
-      this.drawer= false;
-      this.currentComponent = routeName;
+      //this.$router.push({ name: routeName.toLowerCase() });
+      //this.currentComponent = routeName;
+      this.drawer= false;    
+      const [name, param] = routeName.split('/');
+      this.currentComponent = name;
+      if(name === 'Contrato')
+      {
+        this.currentParams = param ? { days: param } : {};
+      }
+      this.currentComponentKey++; // Incrementa para forçar a atualização do componente
     },
     logout() {      
       alert('Saindo da aplicação...');

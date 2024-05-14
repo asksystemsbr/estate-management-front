@@ -9,11 +9,10 @@ import Permissao from '../views/PermissaoView.vue';
 import Cliente from '../views/ClienteView.vue';
 import GrupoUsuario from '../views/GrupoUsuarioView.vue';
 import Imovel from '../views/ImovelView.vue';
-import Contrato from '../views/ContratoView.vue';
+import Contrato from '../components/Contratos/ContratoEdit.vue';
 import Fiador from '../views/FiadorView.vue';
 import Locador from '../views/LocadorView.vue';
 import Home from '../views/HomeView.vue';
-
 
 //testes
 // import FuncionarioCreate from '../components/Funcionario/FuncionarioCreate.vue';

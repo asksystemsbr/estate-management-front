@@ -3,7 +3,7 @@
   </template>
   
   <script>
-  import ContratoList from '../components/Contratos/ContratoList.vue';
+  import ContratoList from '../components/Contratos/ContratoEdit.vue';
   
   export default {
     components: {
