@@ -3,7 +3,7 @@
       <!-- Row for title and button -->
       <v-row align="center" justify="center">
         <v-col cols="auto">
-          <h1>Grupo usuários</h1>
+          <h1>Adicionar Usuário ao Grupo</h1>
         </v-col>
       </v-row>
         <v-row align="center" justify="center">        
@@ -112,7 +112,7 @@ export default {
     return {
         usuarios: [],
       headers: [
-        { title: 'Descricao', value: 'descricao' , sortable: true },
+        { title: 'Descricao', value: 'nome' , sortable: true },
         { title: 'Excluir', value: 'delete' , sortable: false  }
       ],
       search: '',

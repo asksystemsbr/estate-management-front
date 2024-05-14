@@ -2,7 +2,7 @@
     <v-container>
       <v-row justify="center">
         <v-col cols="12" sm="8" md="6">
-          <h1>Novo Funcionário</h1>
+          <h1>Editar Funcionário</h1>
           <v-form @submit.prevent="updateFuncionario" ref="form">
             <v-text-field
               v-model="funcionario.nome"

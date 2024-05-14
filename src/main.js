@@ -1,8 +1,8 @@
 // Importações necessárias
 import { createApp } from 'vue';
 import axios from 'axios';
-import App from './App.vue';
 import router from './router';
+import App from './App.vue';
 import vuetify from './plugins/vuetify';
 import { loadFonts } from './plugins/webfontloader';
 import apiUrl from '@/config'; // Importe o URL base da API
@@ -21,7 +21,7 @@ axios.defaults.baseURL = apiUrl; // Define o URL base da API para todas as requi
 
 // Interceptor para adicionar o token JWT aos cabeçalhos de autorização
 axios.interceptors.request.use(config => {
-    const token = localStorage.getItem('accessToken'); // Recupera o token JWT do armazenamento local
+    const token = localStorage.getItem('token'); // Recupera o token JWT do armazenamento local
     if (token) {
       config.headers.Authorization = `Bearer ${token}`; // Adiciona o token JWT aos cabeçalhos de autorização
     }

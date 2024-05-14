@@ -2,7 +2,7 @@
     <v-container>
       <v-row justify="center">
         <v-col cols="12" sm="8" md="6">
-          <h1>Novo Grupo Usuário</h1>
+          <h1>Editar Grupo Usuário</h1>
           <v-form @submit.prevent="update" ref="form">
             <v-text-field
               v-model="grupoUsuario.descricao"
