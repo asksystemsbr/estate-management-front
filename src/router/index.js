@@ -19,6 +19,9 @@ import Home from '../views/HomeView.vue';
 // import FuncionarioEdit from '../components/Funcionario/FuncionarioEdit.vue';
 // import FuncionarioList from '../components/Funcionario/FuncionarioList.vue'; 
 
+ import LaudoPicture from '../components/Laudos/LaudosPictures.vue'; 
+ import LaudoEdit from '../components/Laudos/LaudoEdit.vue'; 
+
 
 const routes = [
   {
@@ -101,6 +104,19 @@ const routes = [
     path: '/locador',
     name: 'Locador',
     component: Locador,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/laudopicture/:id/:start',
+    name: 'LaudoPicture',
+    component: LaudoPicture,
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/laudoedit',
+    name: 'LaudoEdit',
+    component: LaudoEdit,
     meta: { requiresAuth: true }
   },
   

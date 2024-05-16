@@ -32,7 +32,8 @@
               ></v-list-item>
           </template>
           <!-- Subitens de Ferramentas -->         
-          <v-list-item v-if="userCan(['Document.Read','Document.Write'])" @click="navigateTo('Contrato')" link> Gestão Contratos</v-list-item>  
+          <v-list-item v-if="userCan(['Document.Read','Document.Write'])" @click="navigateTo('Contrato')" link>Gestão Contratos</v-list-item>  
+          <v-list-item v-if="userCan(['Document.Read','Document.Write'])" @click="navigateTo('Laudos')" link>Vistoria</v-list-item>  
         </v-list-group>
         
         <v-list-group value="PermissaoUser">  
@@ -97,6 +98,7 @@ import Contrato from '../views/ContratoView.vue';
 import Fiador from '../views/FiadorView.vue';
 import Locador from '../views/LocadorView.vue';
 import ContratoList from './Contratos/ContratoList.vue';
+import Laudos from './Laudos/LaudoEdit.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
 
@@ -114,6 +116,7 @@ export default {
     Fiador,
     Locador,
     ContratoList,
+    Laudos,
   },
   data() {
     return {
