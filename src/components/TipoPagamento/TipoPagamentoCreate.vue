@@ -5,14 +5,14 @@
           <h1>Novo Tipo de Pagamento</h1>
           <v-form @submit.prevent="createTipo" ref="form">
             <v-text-field
-              v-model="tiposPagamentos.descricao"
+              v-model="tipoPagamento.descricao"
               label="Descrição"
               required
               :rules="[v => !!v || 'Campo obrigatório']"
             ></v-text-field>
   
             <v-text-field
-              v-model="tiposPagamentos.codigo"
+              v-model="tipoPagamento.codigo"
               label="Código"
               required
               :rules="[v => !!v || 'Campo obrigatório']"
@@ -54,12 +54,12 @@
   export default {
     setup(props,{ emit }) {
       const form = ref(null);
-      const tiposPagamentos = ref(tipoPagamento.value); // Inicializa com o valor 
+      //const tiposPagamentos = ref(tipoPagamento.value); // Inicializa com o valor 
   
       const createTipo = async () => {
         if (form.value.validate()) {
           try {
-            const responseRequest = await axios.post('/api/TipoPagamento', tiposPagamentos.value);
+            const responseRequest = await axios.post('/api/TipoPagamento', tipoPagamento.value);
             if (responseRequest.status === 201) {
             emit('update'); // Emitir evento para fechar a modal
           } else {
@@ -89,7 +89,7 @@
         emit('close'); // Emitir evento para fechar a modal
       };
     
-      return { tiposPagamentos, createTipo, limpar,voltar, form };
+      return { tipoPagamento, createTipo, limpar,voltar, form };
     }
   };
   </script>

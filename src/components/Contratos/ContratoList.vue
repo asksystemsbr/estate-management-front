@@ -155,7 +155,8 @@ methods: {
     this.dateStart.setDate(this.dateEnd.getDate()-this.days);
     // Lógica para carregar contratos com base em `days`
     console.log(`Carregando contratos para ${this.days} dias, com data inicial ${this.dateStart} e data final ${this.dateEnd}`);
-    await this.fetchImoveis();
+    //await this.fetchImoveis();
+    await  this.fetchImoveisFilter();
     // Adicione a lógica para buscar e exibir contratos aqui
   },
   handleUpdate() {

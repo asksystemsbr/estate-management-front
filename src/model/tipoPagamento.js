@@ -6,8 +6,10 @@ const tipoPagamento = ref({
 });
 
 function clearTipoPagamento() {    
-  tipoPagamento.value.id = 0;
-  tipoPagamento.value.descricao = '';    
+  tipoPagamento.value = {
+    id: 0,
+    descricao: ''    
+    };
   }
 
 export { tipoPagamento,clearTipoPagamento};

@@ -62,7 +62,7 @@
         </v-card>
       </v-dialog>
   
-      <v-dialog v-model="showAddModal" max-width="70px">
+      <v-dialog v-model="showAddModal" max-width="700px">
         <v-card>
           <imovel-create
             @update="handleUpdate"
