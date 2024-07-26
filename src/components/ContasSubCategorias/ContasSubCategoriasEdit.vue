@@ -196,6 +196,13 @@ export default {
   },
     async deleteCurrent(id) {
       try {        
+        const response = await axios.get(`/api/Conta/hasSubCategories/${id}`);
+          if (response.data) {
+            this.showSnackBar(`Essa Sub categoria já está em uso!`, 'error');
+            this.cancelDelete();
+            return;
+          }
+
         await axios.delete(`/api/ContaSubCategoria/${id}`);   
         this.showSnackBar(`Registro excluído com sucesso`,'success'); 
         this.fetch();
