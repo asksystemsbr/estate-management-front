@@ -147,6 +147,12 @@
       },
       async deleteCurrent(id) {
         try {
+          const response = await axios.get(`/api/Conta/hasCategories/${id}`);
+          if (response.data) {
+            this.showSnackBar(`Essa categoria já está em uso!`, 'error');
+            this.cancelDelete();
+            return;
+          }
           // await axios.delete(`${apiUrl}/api/TipoPagamento/${id}`);
           await axios.delete(`/api/ContaCategoria/${id}`);
           this.showSnackBar(`Registro excluído com sucesso`,'success');   
