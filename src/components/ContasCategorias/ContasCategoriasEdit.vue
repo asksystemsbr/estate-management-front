@@ -2,18 +2,11 @@
     <v-container>
       <v-row justify="center">
         <v-col cols="12" sm="8" md="6">
-          <h1>Editar Tipo de Pagamento</h1>
+          <h1>Editar Categoria de Conta</h1>
           <v-form @submit.prevent="updateTipo" ref="form">
             <v-text-field
-              v-model="tipoPagamento.descricao"
+              v-model="contaCategoria.descricao"
               label="Descrição"
-              required
-              :rules="[v => !!v || 'Campo obrigatório']"
-            ></v-text-field>
-  
-            <v-text-field
-              v-model="tipoPagamento.id"
-              label="Código"
               required
               :rules="[v => !!v || 'Campo obrigatório']"
             ></v-text-field>
@@ -36,7 +29,7 @@
   <script>
   import { ref, onMounted } from 'vue';
   import axios from 'axios';
-  import {tipoPagamento,clearTipoPagamento} from '@/model/tipoPagamento.js';
+  import {contaCategoria,clearContaCategoria} from '@/model/contaCategoria.js';
   
   export default {
     props: {
@@ -52,8 +45,8 @@
   
       const fetchTipo = async () => {
         try {
-            const response = await axios.get(`/api/TipoPagamento/${props.tipoId}`);
-            tipoPagamento.value = response.data ;
+            const response = await axios.get(`/api/ContaCategoria/${props.tipoId}`);
+            contaCategoria.value = response.data ;
         } catch (error) {
           console.error('Erro ao buscar dados do registro:', error);
           emit('error', error); 
@@ -62,12 +55,12 @@
   
       const updateTipo = async () => {
         try {
-          if (!tipoPagamento.value || !tipoPagamento.value.id) {
+          if (!contaCategoria.value || !contaCategoria.value.id) {
           emit('error', {error:'Registro inválido'}); 
           return;
         }
-            await axios.put(`/api/TipoPagamento/${props.tipoId}`, tipoPagamento.value);
-            clearTipoPagamento();
+            await axios.put(`/api/ContaCategoria/${props.tipoId}`, contaCategoria.value);
+            clearContaCategoria();
             emit('update'); // Emitir evento para fechar a modal            
         } catch (error) {
           console.error('Erro ao atualizar registro:', error);
@@ -85,8 +78,8 @@
     });
 
     return {
-      tipoPagamento,
-      clearTipoPagamento,
+      contaCategoria,
+      clearContaCategoria,
       updateTipo,
       closeModal,
       form

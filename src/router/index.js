@@ -3,6 +3,7 @@ import auth from '@/auth'; // Importe o serviço de autenticação
 import LoginForm from '../views/LoginFormView.vue';
 import AppMenu from '../views/AppMenuView.vue';
 import TipoPagamento from '../views/TipoPagamentoView.vue';
+import ContasCategorias from '../views/ContasCategoriasView.vue';
 import Funcionario from '../views/FuncionarioView.vue';
 import UsuarioToGrupo from '../views/UsuarioToGrupoView.vue';
 import Permissao from '../views/PermissaoView.vue';
@@ -13,6 +14,9 @@ import Contrato from '../components/Contratos/ContratoEdit.vue';
 import Fiador from '../views/FiadorView.vue';
 import Locador from '../views/LocadorView.vue';
 import Home from '../views/HomeView.vue';
+import ContaSubCategoria from '../views/ContaSubCategoriaView.vue';
+import Contas from '../views/ContasView.vue';
+import ContasList from '../components/Contas/ContasList.vue';
 
 //testes
 // import FuncionarioCreate from '../components/Funcionario/FuncionarioCreate.vue';
@@ -117,6 +121,30 @@ const routes = [
     path: '/laudoedit',
     name: 'LaudoEdit',
     component: LaudoEdit,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/contasCategorias',
+    name: 'ContasCategorias',
+    component: ContasCategorias,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/contasSubCategorias',
+    name: 'ContaSubCategoria',
+    component: ContaSubCategoria,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/contalist',
+    name: 'Contalist',
+    component: ContasList,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/contas',
+    name: 'contas',
+    component: Contas,
     meta: { requiresAuth: true }
   },
   
