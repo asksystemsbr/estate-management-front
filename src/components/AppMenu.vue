@@ -36,12 +36,26 @@
           <v-list-item v-if="userCan(['Document.Read','Document.Write'])" @click="navigateTo('Laudos')" link>Vistoria</v-list-item>  
         </v-list-group>
         
+        <v-list-group value="Plano_de_Contas">  
+          <template #activator="{ props }">
+              <v-list-item
+                v-bind="props"
+                prepend-icon="mdi-account-circle"
+                title="Plano/Contas"
+              ></v-list-item>
+          </template>
+          <!-- Subitens de Plano_de_Contas -->         
+          <v-list-item v-if="userCan(['ContaCategoria.Read','ContaCategoria.Write'])" @click="navigateTo('ContaCategoria')" link>Categorias</v-list-item>  
+          <v-list-item v-if="userCan(['ContaSubCategoria.Read','ContaSubCategoria.Write'])" @click="navigateTo('ContaSubCategoria')" link>Sub Categorias</v-list-item>  
+          <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('Contas')" link>Contas</v-list-item>  
+        </v-list-group>
+
         <v-list-group value="PermissaoUser">  
           <template #activator="{ props }">
               <v-list-item
                 v-bind="props"
                 prepend-icon="mdi-account-key"
-                title="Permissão Usuários"
+                title="Permissões"
               ></v-list-item>
           </template>
           <!-- Subitens -->
@@ -64,13 +78,13 @@
     <v-main>
       <v-container v-if="!currentComponent">
         <v-row>
-          <v-col cols="12" sm="6">
+          <!-- <v-col cols="12" sm="6">
             <h2>Contratos (15 dias)</h2>
             <v-btn color="blue" @click="navigateTo('Contrato/15')">Ver 15
             </v-btn>
             <contrato-list :days="15" />
-          </v-col>
-          <v-col cols="12" sm="6">
+          </v-col> -->
+          <v-col cols="12" sm="12">
             <h2>Contratos (30 dias)</h2>
             <v-btn color="blue" @click="navigateTo('Contrato/30')">Ver 30
             </v-btn>
@@ -99,6 +113,10 @@ import Fiador from '../views/FiadorView.vue';
 import Locador from '../views/LocadorView.vue';
 import ContratoList from './Contratos/ContratoList.vue';
 import Laudos from './Laudos/LaudoEdit.vue';
+import ContaCategoria from '../views/ContasCategoriasView.vue';
+import ContaSubCategoria from '../views/ContaSubCategoriaView.vue';
+import Contas from '../views/ContasView.vue';
+import ContaList from '../components/Contas/ContasList.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
 
@@ -117,6 +135,10 @@ export default {
     Locador,
     ContratoList,
     Laudos,
+    ContaCategoria,
+    ContaSubCategoria,
+    Contas,
+    ContaList,
   },
   data() {
     return {
