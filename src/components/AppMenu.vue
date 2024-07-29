@@ -27,7 +27,7 @@
           <template #activator="{ props }">
               <v-list-item
                 v-bind="props"
-                prepend-icon="mdi-account-circle"
+                prepend-icon="mdi-tools"
                 title="Ferramentas"
               ></v-list-item>
           </template>
@@ -40,14 +40,15 @@
           <template #activator="{ props }">
               <v-list-item
                 v-bind="props"
-                prepend-icon="mdi-account-circle"
+                prepend-icon="mdi-currency-usd"
                 title="Plano/Contas"
               ></v-list-item>
           </template>
           <!-- Subitens de Plano_de_Contas -->         
           <v-list-item v-if="userCan(['ContaCategoria.Read','ContaCategoria.Write'])" @click="navigateTo('ContaCategoria')" link>Categorias</v-list-item>  
           <v-list-item v-if="userCan(['ContaSubCategoria.Read','ContaSubCategoria.Write'])" @click="navigateTo('ContaSubCategoria')" link>Sub Categorias</v-list-item>  
-          <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('Contas')" link>Contas</v-list-item>  
+          <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('ContasPagar')" link>Contas Pagar</v-list-item>  
+          <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('ContasReceber')" link>Contas Receber</v-list-item>  
         </v-list-group>
 
         <v-list-group value="PermissaoUser">  
@@ -115,7 +116,8 @@ import ContratoList from './Contratos/ContratoList.vue';
 import Laudos from './Laudos/LaudoEdit.vue';
 import ContaCategoria from '../views/ContasCategoriasView.vue';
 import ContaSubCategoria from '../views/ContaSubCategoriaView.vue';
-import Contas from '../views/ContasView.vue';
+import ContasPagar from '../views/ContasPagarView.vue';
+import ContasReceber from '../views/ContasReceberView.vue';
 import ContaList from '../components/Contas/ContasList.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
@@ -137,7 +139,8 @@ export default {
     Laudos,
     ContaCategoria,
     ContaSubCategoria,
-    Contas,
+    ContasReceber,
+    ContasPagar,
     ContaList,
   },
   data() {

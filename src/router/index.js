@@ -15,7 +15,8 @@ import Fiador from '../views/FiadorView.vue';
 import Locador from '../views/LocadorView.vue';
 import Home from '../views/HomeView.vue';
 import ContaSubCategoria from '../views/ContaSubCategoriaView.vue';
-import Contas from '../views/ContasView.vue';
+import ContasPagar from '../views/ContasPagarView.vue';
+import ContasReceber from '../views/ContasReceberView.vue';
 import ContasList from '../components/Contas/ContasList.vue';
 
 //testes
@@ -142,9 +143,15 @@ const routes = [
     meta: { requiresAuth: true }
   },
   {
-    path: '/contas',
-    name: 'contas',
-    component: Contas,
+    path: '/contasPagar',
+    name: 'contasPagar',
+    component: ContasPagar,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/contasReceber',
+    name: 'contasReceber',
+    component: ContasReceber,
     meta: { requiresAuth: true }
   },
   

@@ -1,5 +1,5 @@
 <template>
-    <ContasList />
+    <ContasList :titulo="tituloDinamico"/>
   </template>
   
   <script>
@@ -8,6 +8,11 @@
   export default {
     components: {
       ContasList
+    },
+    data() {
+      return {
+        tituloDinamico: 'RECEBER'
+      };
     }
   };
   </script>

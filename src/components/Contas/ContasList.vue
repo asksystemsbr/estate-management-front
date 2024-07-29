@@ -3,7 +3,7 @@
     <!-- Row para título e botão -->
     <v-row align="center" justify="space-between">
       <v-col cols="auto">
-        <h1>Categorias de Contas</h1>
+        <h1>Contas - {{ titulo }}</h1>
       </v-col>
       <v-col cols="auto">
           <v-btn color="primary" @click.stop="AddNew()">Nova Conta</v-btn>
@@ -53,6 +53,7 @@
         <v-card>
             <contas-edit
             :tipo-id="selectedTipo"
+            :titulo="titulo"
             @update="handleUpdate"
             @error="handleError"
             @close="showEditModal = false"
@@ -64,6 +65,7 @@
         <v-dialog v-model="showAddModal" max-width="800">
         <v-card>
             <contas-create
+            :titulo="titulo"
             @update="handleUpdate"
             @error="handleError"
             @close="showAddModal = false"
@@ -112,6 +114,12 @@
     ContasCreate,
   },
   mixins: [errorHandling],
+  props: {
+    titulo: {
+      type: String,
+      required: true
+    }
+  },  
     data() {
       return {
         contas: [],
@@ -143,7 +151,7 @@
     methods: {
       async fetch() {
         try {
-          const response = await axios.get('/api/Conta');
+          const response = await axios.get(`/api/Conta/GetByType/${this.titulo}`);
           this.contas = response.data;
         } catch (error) {
           this.handleGlobalError(error, 'Failed to fetch register.');
