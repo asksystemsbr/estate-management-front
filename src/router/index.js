@@ -19,6 +19,7 @@ import ContasPagar from '../views/ContasPagarView.vue';
 import ContasReceber from '../views/ContasReceberView.vue';
 import ContasList from '../components/Contas/ContasList.vue';
 import ChartPayment from '../components/Reports/ChartAccount/ChartPayment.vue';
+import ClientReport from '../components/Reports/Client/ClientReport.vue';
 
 //testes
 // import FuncionarioCreate from '../components/Funcionario/FuncionarioCreate.vue';
@@ -159,6 +160,12 @@ const routes = [
     path: '/chartPayment',
     name: 'chartPayment',
     component: ChartPayment,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/clientReport',
+    name: 'clientReport',
+    component: ClientReport,
     meta: { requiresAuth: true }
   },
   

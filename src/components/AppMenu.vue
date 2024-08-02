@@ -61,6 +61,7 @@
           </template>    
           <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('ChartPayment')" link>Contas Pagar</v-list-item>
           <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('ChartReceived')" link>Contas Receber</v-list-item>
+          <v-list-item v-if="userCan(['Cliente.Read','Cliente.Write'])" @click="navigateTo('ClientReport')" link>Clientes</v-list-item>
         </v-list-group>
 
         <v-list-group value="PermissaoUser">  
@@ -132,6 +133,7 @@ import ContasPagar from '../views/ContasPagarView.vue';
 import ContasReceber from '../views/ContasReceberView.vue';
 import ChartPayment from '../views/Reports/ChartPayment.vue';
 import ChartReceived from '../views/Reports/ChartReceived.vue';
+import ClientReport from '../views/Reports/ClientReportView.vue';
 import ContaList from '../components/Contas/ContasList.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
@@ -158,6 +160,7 @@ export default {
     ContaList,
     ChartPayment,
     ChartReceived,
+    ClientReport,
   },
   data() {
     return {

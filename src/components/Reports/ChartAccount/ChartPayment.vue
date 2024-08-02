@@ -40,9 +40,13 @@
       </v-data-table>
       <br><br> 
         <!-- Botões para exportar -->
-        <v-row justify="end">
-            <v-btn color="success" @click="exportToExcel" class="mr-2">Exportar para Excel</v-btn>
-            <v-btn color="info" @click="exportToPDF">Exportar para PDF</v-btn>
+        <v-row align="center" justify="space-between">
+          <v-col cols="auto">
+            <v-btn color="success" @click="exportToExcel" class="mr-2">Exportar Excel</v-btn>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn color="info" @click="exportToPDF">Exportar PDF</v-btn>
+          </v-col>
         </v-row>
         <!-- Snackbar for displaying login status -->
         <v-snackbar
