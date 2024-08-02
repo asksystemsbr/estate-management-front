@@ -51,6 +51,18 @@
           <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('ContasReceber')" link>Contas Receber</v-list-item>  
         </v-list-group>
 
+        <v-list-group value="Reports">  
+          <template #activator="{ props }">
+              <v-list-item
+                v-bind="props"
+                prepend-icon="mdi-chart-bar"
+                title="Relatórios"
+              ></v-list-item>
+          </template>    
+          <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('ChartPayment')" link>Contas Pagar</v-list-item>
+          <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('ChartReceived')" link>Contas Receber</v-list-item>
+        </v-list-group>
+
         <v-list-group value="PermissaoUser">  
           <template #activator="{ props }">
               <v-list-item
@@ -118,6 +130,8 @@ import ContaCategoria from '../views/ContasCategoriasView.vue';
 import ContaSubCategoria from '../views/ContaSubCategoriaView.vue';
 import ContasPagar from '../views/ContasPagarView.vue';
 import ContasReceber from '../views/ContasReceberView.vue';
+import ChartPayment from '../views/Reports/ChartPayment.vue';
+import ChartReceived from '../views/Reports/ChartReceived.vue';
 import ContaList from '../components/Contas/ContasList.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
@@ -142,6 +156,8 @@ export default {
     ContasReceber,
     ContasPagar,
     ContaList,
+    ChartPayment,
+    ChartReceived,
   },
   data() {
     return {

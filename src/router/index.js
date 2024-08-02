@@ -18,6 +18,7 @@ import ContaSubCategoria from '../views/ContaSubCategoriaView.vue';
 import ContasPagar from '../views/ContasPagarView.vue';
 import ContasReceber from '../views/ContasReceberView.vue';
 import ContasList from '../components/Contas/ContasList.vue';
+import ChartPayment from '../components/Reports/ChartAccount/ChartPayment.vue';
 
 //testes
 // import FuncionarioCreate from '../components/Funcionario/FuncionarioCreate.vue';
@@ -154,6 +155,13 @@ const routes = [
     component: ContasReceber,
     meta: { requiresAuth: true }
   },
+  {
+    path: '/chartPayment',
+    name: 'chartPayment',
+    component: ChartPayment,
+    meta: { requiresAuth: true }
+  },
+  
   
   // {
   //   path: '/funcionariocreate',
