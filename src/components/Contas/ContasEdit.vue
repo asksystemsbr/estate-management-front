@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
-        <h1>Editar Conta</h1>
+        <h1>Editar Conta - {{ titulo }}</h1>
         <v-form @submit.prevent="updateTipo" ref="form">
           <v-row align="center" justify="center">        
               <v-col cols="12" md="12">
@@ -225,6 +225,10 @@
         tipoId: {
             type: Number,
             required: true
+        },
+        titulo: {
+            type: String,
+            required: true
         }
     },
   setup(props, { emit }) {
@@ -251,7 +255,7 @@
         id: 0,
         Conta: '',
         valor: '',
-        Tipo:"PAGAR",        
+        Tipo:props.titulo,        
         dtPgto: null,
         IdConta: props.tipoId
       });

@@ -2,7 +2,7 @@
   <v-container>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
-        <h1>Nova Conta</h1>
+        <h1>Nova Conta - {{ titulo }}</h1>
         <v-form @submit.prevent="createTipo" ref="form">
           <v-row align="center" justify="center">
             <v-col cols="12" md="12">
@@ -110,6 +110,12 @@ import axios from 'axios';
 import { contas, clearContas } from '@/model/contas.js';
 
 export default {
+  props: {
+    titulo: {
+      type: String,
+      required: true
+    }
+  },
   setup(props, { emit }) {
     const form = ref(null);
     const menuOpenEnd = ref(false);
@@ -161,6 +167,7 @@ export default {
           contas.value.categoriaId = selectedCategoriaId.value;
           contas.value.subCategoriaId = selectedSubCategoriaId.value;
           contas.value.formaPagamentoId = selectedTipoPagamentoId.value;
+          contas.value.tipo = props.titulo;
 
           const responseRequest = await axios.post('/api/Conta', contas.value);
           if (responseRequest.status === 201) {
