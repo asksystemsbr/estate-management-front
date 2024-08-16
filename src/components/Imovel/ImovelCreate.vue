@@ -11,23 +11,76 @@
             required
           ></v-text-field>
 
-          <v-select
+          <br>
+          <h2>Locatários</h2>
+          <br>
+          <v-row>
+            <v-col cols="12" sm="12" v-for="(locatario, index) in locatarios" :key="index">
+              <v-row>
+                <v-col cols="11" sm="11" >
+                    <v-select
+                      v-model="locatario.id"
+                      :items="clienteCadastrado"
+                      item-title="nome"
+                      item-value="id"
+                      label="Locatario"
+                    ></v-select>
+              </v-col>
+              <v-col cols="1" sm="1" >              
+                  <v-btn icon @click="removeLocatario(index)">
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+              </v-col>
+              </v-row>
+            </v-col>
+            <v-btn @click="addLocatario">Adicionar Locatário</v-btn>
+          </v-row>
+          <br>
+
+          <!-- <v-select
               v-model="imovel.clienteId"
               :items="clienteCadastrado"
               item-title="nome"
               item-value="id"
               label="Locatario"
               required
-          ></v-select>  
+          ></v-select>   -->
 
-          <v-select
+
+          <br>
+          <h2>Locadores</h2>
+          <br>
+          <v-row>
+            <v-col cols="12" sm="12" v-for="(locador, index) in locadores" :key="index">
+              <v-row>
+                <v-col cols="11" sm="11" >
+                    <v-select
+                      v-model="locador.id"
+                      :items="locadorCadastrado"
+                      item-title="nome"
+                      item-value="id"
+                      label="Locador"
+                    ></v-select>
+              </v-col>
+              <v-col cols="1" sm="1" >              
+                  <v-btn icon @click="removeLocador(index)">
+                    <v-icon>mdi-delete</v-icon>
+                  </v-btn>
+              </v-col>
+              </v-row>
+            </v-col>
+            <v-btn @click="addLocador">Adicionar Locador</v-btn>
+          </v-row>
+          <br>
+
+          <!-- <v-select
               v-model="imovel.locadorId"
               :items="locadorCadastrado"
               item-title="nome"
               item-value="id"
               label="Locador"
               required
-          ></v-select>  
+          ></v-select>   -->
 
           <v-text-field
             v-model="imovel.logradouro"
@@ -333,6 +386,8 @@ export default {
     const menuOpendtEntrada  = ref(false);
     const menuHoraInicioSeguroOpen  = ref(false);
     const fiadores=ref([]);
+    const locadores=ref([]);
+    const locatarios=ref([]);
 
     const createImovel = async () => {
       if (form.value.validate()) {
@@ -342,6 +397,33 @@ export default {
           const response  = await axios.post('/api/Imovels', imovel.value);      
             const createdImovel = response.data;     
             console.log(fiadores.value) ;
+            console.log(locadores.value) ;
+            console.log(locatarios.value) ;
+            await axios.delete(`/api/Imovels/deleteimovelfiador/${imovel.value.id}`);   
+            await axios.delete(`/api/Imovels/deleteimovelcliente/${imovel.value.id}`);   
+            await axios.delete(`/api/Imovels/deleteimovellocador/${imovel.value.id}`);   
+            if (Array.isArray(locadores.value) && locadores.value.length > 0) {
+              for (const locador of locadores.value) {
+                const imovelLocador = {
+                  id:0,
+                  imovelId: createdImovel.id, 
+                  locadorId: locador.id
+                };
+                // Enviar cada associação para o servidor
+                await axios.post('/api/Imovels/imovelLocador', imovelLocador);
+              }
+            }
+            if (Array.isArray(locatarios.value) && locatarios.value.length > 0) {
+              for (const locatario of locatarios.value) {
+                const imovelLocatario = {
+                  id:0,
+                  imovelId: createdImovel.id, 
+                  clienteId: locatario.id
+                };
+                // Enviar cada associação para o servidor
+                await axios.post('/api/Imovels/imovelcliente', imovelLocatario);
+              }
+            }
             if (Array.isArray(fiadores.value) && fiadores.value.length > 0) {
               // Percorrer fiadores
               for (const fiador of fiadores.value) {
@@ -466,6 +548,20 @@ export default {
     const removeFiador = (index) => {
       fiadores.value.splice(index, 1);
     };
+    const addLocador = () => {
+      locadores.value.push({ id: null });
+    };
+
+    const removeLocador = (index) => {
+      locadores.value.splice(index, 1);
+    };
+    const addLocatario = () => {
+      locatarios.value.push({ id: null });
+    };
+
+    const removeLocatario = (index) => {
+      locatarios.value.splice(index, 1);
+    };
      function handleDateChange(value) {
           imovel.value.dataVencimento = value;
           menuOpen.value = false;  // Fecha o menu após selecionar a data
@@ -531,6 +627,10 @@ export default {
       handleDateChange,
       addFiador,
       removeFiador,
+      addLocador,
+      removeLocador,
+      addLocatario,
+      removeLocatario,
       formattedDateStartInsure,
       handleDateChangeStartInsure,
       formattedDateEndInsure,
@@ -540,6 +640,8 @@ export default {
       //formattedHoraInicioSeguro,
       handleTimeChange,
       fiadores,
+      locadores,
+      locatarios,
       formatHoraInicioSeguro
     };
   }
