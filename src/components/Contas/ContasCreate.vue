@@ -16,6 +16,30 @@
               ></v-select>
             </v-col>
           </v-row>
+          <v-row  v-if="titulo ==='PAGAR'" align="center" justify="center">        
+              <v-col cols="12" md="12">
+              <v-select
+                v-model="selectedLocatarioId"
+                :items="locatariosDisponiveis"
+                label="Selecione um Locatário"
+                item-title="codigoLocatario"
+                item-value="id"  
+                :error-messages="!validaCliente ? '' : 'Selecione um Locatário válido'"     
+              ></v-select>
+            </v-col>
+          </v-row>     
+          <v-row v-if="titulo ==='RECEBER'" align="center" justify="center">        
+              <v-col cols="12" md="12">
+              <v-select
+                v-model="selectedLocadorId"
+                :items="locadoresDisponiveis"
+                label="Selecione um Locador"
+                item-title="codigoLocador"
+                item-value="id"  
+                :error-messages="!validaCliente ? '' : 'Selecione um Locador válido'"     
+              ></v-select>
+            </v-col>
+          </v-row>                   
           <v-row align="center" justify="center">
             <v-col cols="12" md="12">
               <v-select
@@ -101,11 +125,23 @@
         </v-form>
       </v-col>
     </v-row>
+    <v-snackbar
+        v-model="snackbar.show"
+        :color="snackbar.color"
+        :timeout="snackbar.timeout"
+      >
+        {{ snackbar.message }}
+        <template v-slot:action="{ attrs }">
+          <v-btn color="white" text v-bind="attrs" @click="snackbar.show = false">
+            Fechar
+          </v-btn>
+        </template>
+      </v-snackbar>
   </v-container>
 </template>
 
 <script>
-import { ref, computed, onBeforeMount, onMounted } from 'vue';
+import { ref, computed, onBeforeMount, onMounted,watch } from 'vue';
 import axios from 'axios';
 import { contas, clearContas } from '@/model/contas.js';
 
@@ -119,7 +155,7 @@ export default {
   setup(props, { emit }) {
     const form = ref(null);
     const menuOpenEnd = ref(false);
-    const selectedImovelId = ref(0);
+    const selectedImovelId = ref(0);    
     const selectedCategoriaId = ref(0);
     const selectedSubCategoriaId = ref(0);
     const selectedTipoPagamentoId = ref(0);
@@ -131,7 +167,18 @@ export default {
     const validaCategoria = ref(false);
     const validaSubCategoria = ref(false);
     const validaTipoPagamento = ref(false);
-
+    const selectedLocatarioId = ref(0);
+    const selectedLocadorId = ref(0);   
+    const locatariosDisponiveis = ref([]);
+    const locadoresDisponiveis = ref([]); 
+    const selectedClientId = ref(0);
+    const validaCliente = ref(false);
+    const snackbar = ref({
+            show: false,
+            message: '',
+            color: '',
+            timeout: 3000
+        });
     const createTipo = async () => {
       if (form.value.validate()) {
         try {
@@ -152,21 +199,25 @@ export default {
           if (!selectedTipoPagamentoId.value) {
             validaTipoPagamento.value = true;
           }
+          if (!contas.value.transferencia) {
+            validaCliente.value = true;
+          }
 
           if (
             validaImovel.value ||
             validaCategoria.value ||
             validaSubCategoria.value ||
-            validaTipoPagamento.value
+            validaTipoPagamento.value ||
+            validaCliente.value 
           ) {
-            this.showSnackBar(`Verifique os campos necessários`, 'error');
+            await showSnackBar(`Verifique os campos necessários`, 'error');
             return;
           }
 
           contas.value.clienteId = selectedImovelId.value;
           contas.value.categoriaId = selectedCategoriaId.value;
           contas.value.subCategoriaId = selectedSubCategoriaId.value;
-          contas.value.formaPagamentoId = selectedTipoPagamentoId.value;
+          contas.value.formaPagamentoId = selectedTipoPagamentoId.value;          
           contas.value.tipo = props.titulo;
 
           const responseRequest = await axios.post('/api/Conta', contas.value);
@@ -229,6 +280,52 @@ export default {
       }
     };
 
+    const fetchLocatarios = async () => {
+        try {
+          if (selectedImovelId.value) {
+            const response = await axios.get(`/api/Imovels/getimovelcliente/${selectedImovelId.value}`);
+            locatariosDisponiveis.value = response.data.map(locatario => ({
+              id: locatario.id,
+              codigoLocatario: locatario.nome
+            }));
+          }
+        } catch (error) {
+          emit('error', error);
+        }
+      };
+
+      const fetchLocadores = async () => {
+        try {
+          if (selectedImovelId.value) {
+            const response = await axios.get(`/api/Imovels/getimovellocador/${selectedImovelId.value}`);
+            locadoresDisponiveis.value = response.data.map(locador => ({
+              id: locador.id,
+              codigoLocador: locador.nome
+            }));
+          }
+        } catch (error) {
+          emit('error', error);
+        }
+      };
+
+      // Carregar locatários ou locadores quando o imóvel for selecionado
+      watch(selectedImovelId, async () => {
+        if (props.titulo === 'PAGAR') {
+          await fetchLocatarios();
+        } else if (props.titulo === 'RECEBER') {
+          await fetchLocadores();
+        }
+      });
+
+      // Definir clienteId conforme o título
+      watch([selectedLocatarioId, selectedLocadorId], () => {
+        if (props.titulo === 'PAGAR') {
+          contas.value.transferencia = selectedLocatarioId.value;
+        } else if (props.titulo === 'RECEBER') {
+          contas.value.transferencia = selectedLocadorId.value;
+        }
+      });
+
     const limpar = () => {
       if (form.value) {
         form.value.resetValidation();
@@ -238,6 +335,9 @@ export default {
       selectedCategoriaId.value = 0;
       selectedSubCategoriaId.value = 0;
       selectedTipoPagamentoId.value = 0;
+      selectedLocadorId.value = 0;
+      selectedLocatarioId.value = 0;
+      selectedClientId.value = 0;
     };
 
     const handleCategoriaSelectClick = () => {
@@ -254,7 +354,12 @@ export default {
       contas.value.dtVencimento = value;
       menuOpenEnd.value = false;
     };
-
+    const showSnackBar = (message,color) => 
+    {
+      snackbar.value.message = message;
+      snackbar.value.color = color;
+      snackbar.value.show = true;
+    };
     const initialize = () => {
       limpar();
       fetchImovel();
@@ -300,6 +405,14 @@ export default {
       validaCategoria,
       validaSubCategoria,
       validaTipoPagamento,
+      selectedLocatarioId,
+      selectedLocadorId,
+      locatariosDisponiveis,
+      locadoresDisponiveis,
+      selectedClientId,
+      validaCliente,
+      snackbar,
+      showSnackBar
     };
   },
 };

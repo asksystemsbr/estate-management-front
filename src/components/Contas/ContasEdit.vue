@@ -16,6 +16,30 @@
               ></v-select>
             </v-col>
           </v-row>
+          <v-row  v-if="titulo ==='PAGAR'" align="center" justify="center">        
+              <v-col cols="12" md="12">
+              <v-select
+                v-model="selectedLocatarioId"
+                :items="locatariosDisponiveis"
+                label="Selecione um Locatário"
+                item-title="codigoLocatario"
+                item-value="id"  
+                :error-messages="!validaCliente ? '' : 'Selecione um Locatário válido'"     
+              ></v-select>
+            </v-col>
+          </v-row>     
+          <v-row v-if="titulo ==='RECEBER'" align="center" justify="center">        
+              <v-col cols="12" md="12">
+              <v-select
+                v-model="selectedLocadorId"
+                :items="locadoresDisponiveis"
+                label="Selecione um Locador"
+                item-title="codigoLocador"
+                item-value="id"  
+                :error-messages="!validaCliente ? '' : 'Selecione um Locador válido'"     
+              ></v-select>
+            </v-col>
+          </v-row>         
           <v-row align="center" justify="center">        
               <v-col cols="12" md="12">
               <v-select
@@ -216,7 +240,7 @@
 </template>
   
   <script>
-  import { ref, onMounted,computed,nextTick } from 'vue';
+  import { ref, onMounted,computed,nextTick,watch  } from 'vue';
   import axios from 'axios';
   import {contas,clearContas} from '@/model/contas.js';
   
@@ -236,14 +260,19 @@
       const menuOpenEnd  = ref(false);
       const menuOpenPaymentDate = ref(false);
       const selectedImovelId  = ref(0);
+      const selectedLocatarioId = ref(0);
+      const selectedLocadorId = ref(0);
       const selectedCategoriaId  = ref(0);
       const selectedSubCategoriaId  = ref(0);
       const selectedTipoPagamentoId  = ref(0);
       const imoveisDisponiveis=ref([]);
+      const locatariosDisponiveis = ref([]);
+      const locadoresDisponiveis = ref([]);
       const categoriasDisponiveis=ref([]);
       const subCategoriasDisponiveis=ref([]);
       const tiposPagamentosDisponiveis=ref([]);
       const validaImovel  = ref(false);
+      const validaCliente = ref(false);
       const validaCategoria  = ref(false);
       const validaSubCategoria  = ref(false);
       const validaTipoPagamento  = ref(false);
@@ -281,6 +310,7 @@
         await nextTick(); // Aguarda a atualização do DOM
         selectedImovelId.value = contas.value.clienteId;
         selectedCategoriaId.value = contas.value.categoriaId;
+
         fetchSubCategoria();
         selectedSubCategoriaId.value = contas.value.subCategoriaId;
         selectedTipoPagamentoId.value = contas.value.formaPagamentoId;
@@ -289,6 +319,13 @@
         contas.value.categoriaId = response.data.categoriaId;
         contas.value.subCategoriaId = response.data.subCategoriaId;
         contas.value.formaPagamentoId = response.data.formaPagamentoId;
+
+        // Preencher o cliente selecionado
+        if (props.titulo === 'PAGAR') {
+          selectedLocatarioId.value = contas.value.transferencia;
+        } else if (props.titulo === 'RECEBER') {
+          selectedLocadorId.value = contas.value.transferencia;
+        }
         //console.log('ID Situação Cliente:', response.data.iD_SITUACAO_CLIENTE);
       } catch (error) {
         emit('error', error); 
@@ -351,8 +388,7 @@
 
       const updateTipo = async () => {
         try {
-          if (!contas.value || !contas.value.id) {
-         
+          if (!contas.value || !contas.value.id) {         
             emit('error', {error:'Registro inválido'}); 
           return;
         }
@@ -402,6 +438,52 @@
           emit('error', error);
         }
       };
+
+      const fetchLocatarios = async () => {
+        try {
+          if (selectedImovelId.value) {
+            const response = await axios.get(`/api/Imovels/getimovelcliente/${selectedImovelId.value}`);
+            locatariosDisponiveis.value = response.data.map(locatario => ({
+              id: locatario.id,
+              codigoLocatario: locatario.nome
+            }));
+          }
+        } catch (error) {
+          emit('error', error);
+        }
+      };
+
+      const fetchLocadores = async () => {
+        try {
+          if (selectedImovelId.value) {
+            const response = await axios.get(`/api/Imovels/getimovellocador/${selectedImovelId.value}`);
+            locadoresDisponiveis.value = response.data.map(locador => ({
+              id: locador.id,
+              codigoLocador: locador.nome
+            }));
+          }
+        } catch (error) {
+          emit('error', error);
+        }
+      };
+
+      // Carregar locatários ou locadores quando o imóvel for selecionado
+      watch(selectedImovelId, async () => {
+        if (props.titulo === 'PAGAR') {
+          await fetchLocatarios();
+        } else if (props.titulo === 'RECEBER') {
+          await fetchLocadores();
+        }
+      });
+
+      // Definir clienteId conforme o título
+      watch([selectedLocatarioId, selectedLocadorId], () => {
+        if (props.titulo === 'PAGAR') {
+          contas.value.transferencia = selectedLocatarioId.value;
+        } else if (props.titulo === 'RECEBER') {
+          contas.value.transferencia = selectedLocadorId.value;
+        }
+      });
 
       const confirmDelete = async (id) => {
         try {
@@ -548,7 +630,12 @@
         showConfirm,
         messageConfirm,
         confirmMessage,
-        showMessage
+        showMessage,
+        locatariosDisponiveis,
+        locadoresDisponiveis,
+        selectedLocatarioId,
+        selectedLocadorId,
+        validaCliente,
     };
     }
   };

@@ -24,8 +24,8 @@
       <template v-slot:item="{ item, index }">
         <tr :style="{ backgroundColor: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0' }">
           <td class="text-left">{{ item.codigoImovel }}</td>
-          <td class="text-left">{{ item.cliente.nome }}</td>
-          <td class="text-left">{{ item.locador.nome }}</td>
+          <td class="text-left">{{ item.locatario }}</td>
+          <td class="text-left">{{ item.locador }}</td>
           <td class="text-left">{{ item.logradouro }}</td>
           <td class="text-left">{{ item.isFiador ? 'Sim' :'Não' }}</td>
           <td class="text-left">{{ item.dataVencimento }}</td>
@@ -69,8 +69,8 @@ data() {
     imoveis: [],
     headers: [
     { title: 'Cód', value: 'codigoImovel' , sortable: true },  
-    { title: 'Locatário', value: 'cliente.nome' , sortable: true },
-      { title: 'Locador', value: 'locador.nome' , sortable: true },
+    { title: 'Locatário', value: 'locatario' , sortable: true },
+      { title: 'Locador', value: 'locador' , sortable: true },
       { title: 'Logradouro', value: 'logradouro' , sortable: true },
       { title: 'Fiador', value: 'isFiador' , sortable: true },
       { title: 'Vencimento', value: 'dataVencimento' , sortable: true },

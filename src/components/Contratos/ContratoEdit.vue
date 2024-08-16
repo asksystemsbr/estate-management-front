@@ -122,8 +122,8 @@
             ></v-checkbox>
           </td>
             <td class="text-left">{{ item.codigoImovel }}</td>
-            <td class="text-left">{{ item.cliente.nome }}</td>
-            <td class="text-left">{{ item.locador.nome }}</td>
+            <td class="text-left">{{ item.locatario }}</td>
+            <td class="text-left">{{ item.locador }}</td>
             <td class="text-left">{{ item.logradouro }}</td>
             <td class="text-left">{{ item.valor }}</td>
             <td class="text-left">{{ item.isFiador ? 'Sim' :'Não' }}</td>
@@ -175,6 +175,22 @@
         </v-card>
       </v-dialog>
   
+      <v-dialog v-model="showPlanoContasModal" max-width="500px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Lançar no Plano de Contas?</span>
+          </v-card-title>
+          <v-card-text>
+            <p>Deseja lançar essa operação no plano de contas?</p>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" @click="showPlanoContasModal = false">Cancelar</v-btn>
+            <v-btn color="green darken-1" @click="confirmPlanoContas">Confirmar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
       <!-- Snackbar for notifications -->
       <v-snackbar
         v-model="snackbar.show"
@@ -188,6 +204,29 @@
           </v-btn>
         </template>
       </v-snackbar>
+
+      <v-dialog v-model="showLocadorModal" max-width="500px">
+        <v-card>
+          <v-card-title>
+            <span class="headline">Selecione o Locador</span>
+          </v-card-title>
+          <v-card-text>
+            <v-radio-group v-model="selectedLocadorId">
+              <v-radio
+                v-for="locador in locadoresModalList"
+                :key="locador.id"
+                :label="locador.nome"
+                :value="locador.id"
+              ></v-radio>
+            </v-radio-group>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" @click="showLocadorModal = false">Cancelar</v-btn>
+            <v-btn color="green darken-1" @click="confirmLocadorSelection">Confirmar</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>    
     </v-container>
   </template>
   
@@ -216,8 +255,8 @@ export default {
       imoveis: [],
       headers: [
       { title: 'Cód', value: 'codigoImovel' , sortable: true },  
-      { title: 'Locatário', value: 'cliente.nome' , sortable: true },
-        { title: 'Locador', value: 'locador.nome' , sortable: true },
+      { title: 'Locatário', value: 'locatario' , sortable: true },
+        { title: 'Locador', value: 'locador' , sortable: true },
         { title: 'Logradouro', value: 'logradouro' , sortable: true },
         { title: 'Valor', value: 'valor' , sortable: true },
         { title: 'Fiador', value: 'isFiador' , sortable: true },
@@ -247,6 +286,11 @@ export default {
       valid: false,
       selected: [],
       selectAll: false,
+      showLocadorModal: false,
+      locadoresModalList: [],
+      selectedLocadorId: null,
+      selectedImovelIdForReceipt: null,
+      showPlanoContasModal: false,
     };
   },
   async created() {
@@ -338,33 +382,112 @@ export default {
         this.handleGlobalError(error, 'Erro ao gerar documento');
       }
     },
+    // async getReceipt(id) {
+    //   try {
+    //         const response = await axios.get(`/api/Document/gerarrecibo/${id}`, {
+    //           responseType: 'blob' // Importante para tratar a resposta como um Blob
+    //         });
+
+    //             // Extrair o nome do arquivo do cabeçalho de disposição de conteúdo
+    //         const contentDisposition = response.headers['content-disposition'];
+    //         let filename = 'Recibo.docx'; // Nome padrão se o cabeçalho não estiver presente
+    //         if (contentDisposition) {
+    //           const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+    //           if (filenameMatch.length > 1) {
+    //             filename = filenameMatch[1];
+    //           }
+    //         }
+
+    //         const url = window.URL.createObjectURL(new Blob([response.data]));
+    //         const link = document.createElement('a');
+    //         link.href = url;
+    //         link.setAttribute('download', filename); // Define o nome do arquivo
+    //         document.body.appendChild(link);
+    //         link.click();
+    //         this.showSnackBar(`Recibo gerado com Sucesso`,'success');    
+    //   } catch (error) {
+    //     this.handleGlobalError(error, 'Erro ao gerar documento');
+    //   }
+    // },
     async getReceipt(id) {
       try {
-            const response = await axios.get(`/api/Document/gerarrecibo/${id}`, {
-              responseType: 'blob' // Importante para tratar a resposta como um Blob
-            });
+        const imovel = this.imoveis.find(item => item.id === id);
+        if (imovel && imovel.locadores && imovel.locadores.length > 0) {
+          // Usando diretamente a lista de locadores do ImovelViewModel
+          this.locadoresModalList = imovel.locadores;
 
-                // Extrair o nome do arquivo do cabeçalho de disposição de conteúdo
-            const contentDisposition = response.headers['content-disposition'];
-            let filename = 'Recibo.docx'; // Nome padrão se o cabeçalho não estiver presente
-            if (contentDisposition) {
-              const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
-              if (filenameMatch.length > 1) {
-                filename = filenameMatch[1];
-              }
-            }
+          // Abrir o modal
+          this.selectedImovelIdForReceipt = id;
+          this.showLocadorModal = true;
+        } else {
+          this.handleGlobalError('Nenhum locador disponível para este imóvel.');
+        }
+      } catch (error) {
+        this.handleGlobalError(error, 'Erro ao buscar locadores');
+      }
+    },
 
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', filename); // Define o nome do arquivo
-            document.body.appendChild(link);
-            link.click();
-            this.showSnackBar(`Recibo gerado com Sucesso`,'success');    
+
+    confirmLocadorSelection() {
+      if (this.selectedLocadorId !== null) {
+        const selectedLocador = this.locadoresModalList.find(locador => locador.id === this.selectedLocadorId);
+        if (selectedLocador) {
+          // Chamar a API para gerar o recibo com o ID do locador selecionado
+          this.generateReceipt(this.selectedImovelIdForReceipt, selectedLocador.id);
+          this.showLocadorModal = false;
+        }
+      }
+    },
+
+    async generateReceipt(imovelId, locadorId) {
+      try {
+        const response = await axios.get(`/api/Document/gerarrecibo/${imovelId}`, {
+          params: { locadorId }, // Passando o ID do locador como parâmetro
+          responseType: 'blob' // Importante para tratar a resposta como um Blob
+        });
+
+        // Extrair o nome do arquivo do cabeçalho de disposição de conteúdo
+        const contentDisposition = response.headers['content-disposition'];
+        let filename = 'Recibo.docx'; // Nome padrão se o cabeçalho não estiver presente
+        if (contentDisposition) {
+          const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+          if (filenameMatch.length > 1) {
+            filename = filenameMatch[1];
+          }
+        }
+
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename); // Define o nome do arquivo
+        document.body.appendChild(link);
+        link.click();
+        this.showSnackBar(`Recibo gerado com Sucesso`, 'success');
+        
+        // Após gerar o recibo, perguntar se deseja lançar no plano de contas
+        this.selectedImovelIdForReceipt = imovelId;
+        this.selectedLocadorIdForReceipt = locadorId;
+        this.showPlanoContasModal = true;
+        
       } catch (error) {
         this.handleGlobalError(error, 'Erro ao gerar documento');
       }
+    },    
+
+    async confirmPlanoContas() {
+      try {
+        const responseRequest = await axios.post(`/api/Conta/automatic/${this.selectedImovelIdForReceipt}?idClient=${this.selectedLocadorIdForReceipt}`);
+          if (responseRequest.status === 201) {
+            this.showSnackBar('Lançamento no plano de contas realizado com sucesso!', 'success');
+          } else {
+            this.showSnackBar('Erro ao lançar no plano de contas','error');
+          }       
+        this.showPlanoContasModal = false;
+      } catch (error) {
+        this.handleGlobalError(error, 'Erro ao lançar no plano de contas');
+      }
     },
+
     async newPrice(id) {
       try {
             this.showAdjustModal = true;
