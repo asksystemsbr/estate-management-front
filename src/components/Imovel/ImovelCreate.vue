@@ -37,16 +37,6 @@
           </v-row>
           <br>
 
-          <!-- <v-select
-              v-model="imovel.clienteId"
-              :items="clienteCadastrado"
-              item-title="nome"
-              item-value="id"
-              label="Locatario"
-              required
-          ></v-select>   -->
-
-
           <br>
           <h2>Locadores</h2>
           <br>

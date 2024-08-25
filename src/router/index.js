@@ -21,6 +21,7 @@ import ContasList from '../components/Contas/ContasList.vue';
 import ChartPayment from '../components/Reports/ChartAccount/ChartPayment.vue';
 import ClientReport from '../components/Reports/Client/ClientReport.vue';
 import CashFlow from '../components/Reports/CashFlow/CashFlow.vue';
+import ChartAccountability from '../components/Reports/Accountability/ChartAccountability.vue';
 
 //testes
 // import FuncionarioCreate from '../components/Funcionario/FuncionarioCreate.vue';
@@ -175,7 +176,12 @@ const routes = [
     component: CashFlow,
     meta: { requiresAuth: true }
   },
-  
+  {
+    path: '/chartAccountability',
+    name: 'chartAccountability',
+    component: ChartAccountability,
+    meta: { requiresAuth: true }
+  },
   
   // {
   //   path: '/funcionariocreate',

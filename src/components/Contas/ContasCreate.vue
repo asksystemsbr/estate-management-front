@@ -199,7 +199,7 @@ export default {
           if (!selectedTipoPagamentoId.value) {
             validaTipoPagamento.value = true;
           }
-          if (!contas.value.transferencia) {
+          if (!selectedLocatarioId.value) {
             validaCliente.value = true;
           }
 
@@ -214,10 +214,11 @@ export default {
             return;
           }
 
-          contas.value.clienteId = selectedImovelId.value;
+          contas.value.imovelId = selectedImovelId.value;
           contas.value.categoriaId = selectedCategoriaId.value;
           contas.value.subCategoriaId = selectedSubCategoriaId.value;
           contas.value.formaPagamentoId = selectedTipoPagamentoId.value;          
+          contas.value.ClienteId = selectedLocatarioId.value;
           contas.value.tipo = props.titulo;
 
           const responseRequest = await axios.post('/api/Conta', contas.value);
@@ -317,12 +318,11 @@ export default {
         }
       });
 
-      // Definir clienteId conforme o título
       watch([selectedLocatarioId, selectedLocadorId], () => {
         if (props.titulo === 'PAGAR') {
-          contas.value.transferencia = selectedLocatarioId.value;
+          contas.value.ClienteId = selectedLocatarioId.value;
         } else if (props.titulo === 'RECEBER') {
-          contas.value.transferencia = selectedLocadorId.value;
+          contas.value.ClienteId = selectedLocadorId.value;
         }
       });
 

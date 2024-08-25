@@ -63,6 +63,7 @@
           <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('ChartReceived')" link>Contas Receber</v-list-item>
           <v-list-item v-if="userCan(['Cliente.Read','Cliente.Write'])" @click="navigateTo('ClientReport')" link>Clientes</v-list-item>
           <v-list-item v-if="userCan(['ReportFinances.Read','ReportFinances.Write'])" @click="navigateTo('CashFlow')" link>Fluxo de Caixa</v-list-item>
+          <v-list-item v-if="userCan(['PrestacaoContas.Read','PrestacaoContas.Write'])" @click="navigateTo('ChartAccountability')" link>Prestação de contas</v-list-item>
         </v-list-group>
 
         <v-list-group value="PermissaoUser">  
@@ -137,6 +138,7 @@ import ChartReceived from '../views/Reports/ChartReceived.vue';
 import ClientReport from '../views/Reports/ClientReportView.vue';
 import ContaList from '../components/Contas/ContasList.vue';
 import CashFlow from '../views/Reports/CashFlowReportView.vue';
+import ChartAccountability from '../views/Reports/ChartAccountability.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
 
@@ -164,6 +166,7 @@ export default {
     ChartReceived,
     ClientReport,
     CashFlow,
+    ChartAccountability,
   },
   data() {
     return {
