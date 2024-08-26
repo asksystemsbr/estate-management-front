@@ -7,14 +7,14 @@ const contas = ref({
   tipo: '',
   dtVencimento: null,
   dtPgto: null,
-  clienteId: null,
+  ImovelId: null,
   valorPagoRecebido: 0.0,
   fornecedorId: null,
   categoriaId: 0,
   subCategoriaId: 0,
   formaPagamentoId: 0,
   numCheque: '',
-  transferencia: 0,
+  ClienteId: 0,
 });
 
 function clearContas() {
@@ -25,14 +25,14 @@ function clearContas() {
     tipo: '',
     dtVencimento: null,
     dtPgto: null,
-    clienteId: null,
+    ImovelId: null,
     valorPagoRecebido: 0.0,
     fornecedorId: null,
     categoriaId: 0,
     subCategoriaId: 0,
     formaPagamentoId: 0,
     numCheque: '',
-    transferencia: 0,
+    ClienteId: 0,
   };
 }
 

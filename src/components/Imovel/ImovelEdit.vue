@@ -37,14 +37,6 @@
           </v-row>
           <br>
 
-          <!-- <v-select
-              v-model="imovel.clienteId"
-              :items="clienteCadastrado"
-              item-title="nome"
-              item-value="id"
-              label="Locatario"
-              required
-          ></v-select>   -->
           <br>
           <h2>Locadores</h2>
           <br>
@@ -213,6 +205,12 @@
               required
         ></v-select>  
 
+        <v-text-field
+            v-model="imovel.valor_caucao"
+            label="Valor Caução"
+            type="number"
+        ></v-text-field>
+        
         <br>
         <h2>Fiadores</h2>
         <br>
@@ -490,7 +488,7 @@
 
       const fetchSituacaoCliente =async () => {
       try {
-        const response = await axios.get(`/api/SituacaoCliente`);
+        const response = await axios.get(`/api/SituacaoImovel`);
         situacoesCliente.value = response.data.map(situacao => ({
         id: situacao.id,
         descricao: situacao.descricao

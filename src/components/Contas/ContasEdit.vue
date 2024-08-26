@@ -308,23 +308,24 @@
             // Transforme strings de data em objetos Date
         contas.value.dtVencimento = contas.value.dtVencimento ? new Date(contas.value.dtVencimento) : null;
         await nextTick(); // Aguarda a atualização do DOM
-        selectedImovelId.value = contas.value.clienteId;
+        selectedImovelId.value = contas.value.imovelId;
         selectedCategoriaId.value = contas.value.categoriaId;
 
         fetchSubCategoria();
         selectedSubCategoriaId.value = contas.value.subCategoriaId;
         selectedTipoPagamentoId.value = contas.value.formaPagamentoId;
 
-        contas.value.clienteId = response.data.clienteId;
+        contas.value.imovelId = response.data.imovelId;
         contas.value.categoriaId = response.data.categoriaId;
         contas.value.subCategoriaId = response.data.subCategoriaId;
         contas.value.formaPagamentoId = response.data.formaPagamentoId;
+        contas.value.ClienteId = response.data.clienteId;
 
         // Preencher o cliente selecionado
         if (props.titulo === 'PAGAR') {
-          selectedLocatarioId.value = contas.value.transferencia;
+          selectedLocatarioId.value = contas.value.ClienteId;
         } else if (props.titulo === 'RECEBER') {
-          selectedLocadorId.value = contas.value.transferencia;
+          selectedLocadorId.value = contas.value.ClienteId;
         }
         //console.log('ID Situação Cliente:', response.data.iD_SITUACAO_CLIENTE);
       } catch (error) {
@@ -476,12 +477,11 @@
         }
       });
 
-      // Definir clienteId conforme o título
       watch([selectedLocatarioId, selectedLocadorId], () => {
         if (props.titulo === 'PAGAR') {
-          contas.value.transferencia = selectedLocatarioId.value;
+          contas.value.ClienteId = selectedLocatarioId.value;
         } else if (props.titulo === 'RECEBER') {
-          contas.value.transferencia = selectedLocadorId.value;
+          contas.value.ClienteId = selectedLocadorId.value;
         }
       });
 

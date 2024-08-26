@@ -128,6 +128,7 @@
             <td class="text-left">{{ item.valor }}</td>
             <td class="text-left">{{ item.isFiador ? 'Sim' :'Não' }}</td>
             <td class="text-left">{{ item.dataVencimento }}</td>
+            <td class="text-left">{{ item.typeContract }}</td>
             <td class="text-center">
               <v-btn color="blue" icon @click="getContract(item.id)">
                 <v-icon>mdi-file-word</v-icon>
@@ -261,6 +262,7 @@ export default {
         { title: 'Valor', value: 'valor' , sortable: true },
         { title: 'Fiador', value: 'isFiador' , sortable: true },
         { title: 'Vencimento', value: 'dataVencimento' , sortable: true },
+        { title: 'Prazo', value: 'typeContract' , sortable: true },
         { title: 'Gerar', value: 'edit' , sortable: false },
         { title: 'Recibo', value: 'delete' , sortable: false  },
       ],
