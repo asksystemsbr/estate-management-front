@@ -29,6 +29,7 @@
           <td class="text-left">{{ item.logradouro }}</td>
           <td class="text-left">{{ item.isFiador ? 'Sim' :'Não' }}</td>
           <td class="text-left">{{ item.dataVencimento }}</td>
+          <td class="text-left">{{ item.typeContract }}</td>
         </tr>
       </template>
     </v-data-table>
@@ -74,6 +75,7 @@ data() {
       { title: 'Logradouro', value: 'logradouro' , sortable: true },
       { title: 'Fiador', value: 'isFiador' , sortable: true },
       { title: 'Vencimento', value: 'dataVencimento' , sortable: true },
+      { title: 'Prazo', value: 'typeContract' , sortable: true },
     ],
     search: '',  
     currentDeleteId: null,      

@@ -36,6 +36,7 @@
             <td class="text-left">{{ item.logradouro }}</td>
             <td class="text-left">{{ item.numero }}</td>
             <td class="text-left">{{ item.isFiador ? 'Sim' :'Não' }}</td>
+            <td class="text-left">{{ item.typeContract }}</td>
             <td class="text-center">
               <v-btn color="blue" icon @click="editImovel(item.id)">
                 <v-icon>mdi-pencil</v-icon>
@@ -124,6 +125,7 @@ export default {
         { title: 'Logradouro', value: 'logradouro' , sortable: true },
         { title: 'Número', value: 'numero' , sortable: true },
         { title: 'Fiador', value: 'isFiador' , sortable: true },
+        { title: 'Prazo', value: 'typeContract' , sortable: true },
         { title: 'Editar', value: 'edit' , sortable: false },
         { title: 'Excluir', value: 'delete' , sortable: false  }
       ],

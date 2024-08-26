@@ -3,10 +3,10 @@
       <!-- Row for title and button -->
       <v-row align="center" justify="space-between">
         <v-col cols="auto">
-          <h1>Clientes</h1>
+          <h1>Locatários</h1>
         </v-col>
         <v-col cols="auto">
-          <v-btn color="primary" @click="showAddModal = true">Novo Cliente</v-btn>
+          <v-btn color="primary" @click="showAddModal = true">Novo Locatário</v-btn>
         </v-col>
       </v-row>
       <br><br>
@@ -73,7 +73,7 @@
       <v-dialog v-model="showDeleteConfirm" persistent>
         <v-card>
           <v-card-title class="text-h5">Confirmação</v-card-title>
-          <v-card-text>Tem certeza de que deseja excluir este cliente?</v-card-text>
+          <v-card-text>Tem certeza de que deseja excluir este locatário?</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="blue darken-1"  @click="cancelDelete">Cancelar</v-btn>

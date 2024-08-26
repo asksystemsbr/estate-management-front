@@ -2,7 +2,7 @@
     <v-container>
       <v-row justify="center">
         <v-col cols="12" sm="8" md="6">
-          <h1>Editar Cliente</h1>
+          <h1>Editar Locatário</h1>
           <v-form @submit.prevent="updateClient" ref="form">
             <v-text-field
               v-model="client.codigo_cliente"
