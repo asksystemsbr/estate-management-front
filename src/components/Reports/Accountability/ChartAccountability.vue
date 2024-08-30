@@ -466,7 +466,7 @@ export default {
             const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `prestacao_contas_proprietarios.xlsx`;
+            link.download = `prestacao_contas_proprietarios_${this.selectedLocatarioName}.xlsx`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -554,7 +554,7 @@ export default {
             doc.text(`Araçariguama, ${currentDate}`, 140, finalYDiscounts + 40, null, null, 'center');
 
             // Salvar o PDF
-            doc.save(`prestacao_contas_proprietario.pdf`);
+            doc.save(`prestacao_contas_proprietario_${this.selectedLocatarioName}.pdf`);
           } catch (error) {
             console.error("Erro ao gerar o PDF:", error);
             this.showSnackBar("Erro ao gerar o PDF", "error");
