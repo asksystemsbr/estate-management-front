@@ -64,6 +64,8 @@
           <v-list-item v-if="userCan(['Cliente.Read','Cliente.Write'])" @click="navigateTo('ClientReport')" link>Clientes</v-list-item>
           <v-list-item v-if="userCan(['ReportFinances.Read','ReportFinances.Write'])" @click="navigateTo('CashFlow')" link>Fluxo de Caixa</v-list-item>
           <v-list-item v-if="userCan(['PrestacaoContas.Read','PrestacaoContas.Write'])" @click="navigateTo('ChartAccountability')" link>Prestação de contas</v-list-item>
+          <v-list-item v-if="userCan(['DemonstrativoAluguel.Read','DemonstrativoAluguel.Write'])" @click="navigateTo('ChartDemonstrativoAluguel')" link>Demonstrativo de aluguel</v-list-item>
+          <v-list-item v-if="userCan(['Dimob.Read','Dimob.Write'])" @click="navigateTo('ChartDimob')" link>DIMOB</v-list-item>
         </v-list-group>
 
         <v-list-group value="PermissaoUser">  
@@ -139,6 +141,8 @@ import ClientReport from '../views/Reports/ClientReportView.vue';
 import ContaList from '../components/Contas/ContasList.vue';
 import CashFlow from '../views/Reports/CashFlowReportView.vue';
 import ChartAccountability from '../views/Reports/ChartAccountability.vue';
+import ChartDemonstrativoAluguel from '../views/Reports/ChartDemonstrativoAluguel.vue';
+import ChartDimob from '../views/Reports/ChartDIMOB.vue';
 import auth from '@/auth'; // Importe o serviço de autenticação
 
 
@@ -167,6 +171,8 @@ export default {
     ClientReport,
     CashFlow,
     ChartAccountability,
+    ChartDemonstrativoAluguel,
+    ChartDimob,
   },
   data() {
     return {

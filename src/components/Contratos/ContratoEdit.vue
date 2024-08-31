@@ -126,7 +126,7 @@
             <td class="text-left">{{ item.locador }}</td>
             <td class="text-left">{{ item.logradouro }}</td>
             <td class="text-left">{{ item.valor }}</td>
-            <td class="text-left">{{ item.isFiador ? 'Sim' :'Não' }}</td>
+            <td class="text-left">{{ item.typeEnsurance}}</td>
             <td class="text-left">{{ item.dataVencimento }}</td>
             <td class="text-left">{{ item.typeContract }}</td>
             <td class="text-center">
@@ -236,6 +236,7 @@
 import axios from 'axios';
 import errorHandling from '@/utilities/errorHandling';
 import { imovel, clearImovel } from '@/model/imovel.js';
+//import { isVNode } from 'vue';
 
 export default {
   props: {
@@ -260,7 +261,7 @@ export default {
         { title: 'Locador', value: 'locador' , sortable: true },
         { title: 'Logradouro', value: 'logradouro' , sortable: true },
         { title: 'Valor', value: 'valor' , sortable: true },
-        { title: 'Fiador', value: 'isFiador' , sortable: true },
+        { title: 'Tipo_Seguro', value: 'typeEnsurance' , sortable: true },
         { title: 'Vencimento', value: 'dataVencimento' , sortable: true },
         { title: 'Prazo', value: 'typeContract' , sortable: true },
         { title: 'Gerar', value: 'edit' , sortable: false },
@@ -292,6 +293,8 @@ export default {
       locadoresModalList: [],
       selectedLocadorId: null,
       selectedImovelIdForReceipt: null,
+      selectedLocatarioIdForReceipt: null,
+      selectedLocadorIdForReceipt: null,
       showPlanoContasModal: false,
     };
   },
@@ -414,15 +417,29 @@ export default {
     async getReceipt(id) {
       try {
         const imovel = this.imoveis.find(item => item.id === id);
+        let isOk  = false;
         if (imovel && imovel.locadores && imovel.locadores.length > 0) {
           // Usando diretamente a lista de locadores do ImovelViewModel
           this.locadoresModalList = imovel.locadores;
 
+          isOk = true;
+        } else {
+          this.handleGlobalError('Nenhum locador disponível para este imóvel.');
+        }
+        if (imovel && imovel.locatarios && imovel.locatarios.length > 0) {
+          // Usando diretamente a lista de locadores do ImovelViewModel
+          this.locatariosModalList = imovel.locatarios;
+
+          isOk = true;
+        } else {
+          this.handleGlobalError('Nenhum locatário disponível para este imóvel.');
+        }
+
+        if(isOk)
+        {
           // Abrir o modal
           this.selectedImovelIdForReceipt = id;
           this.showLocadorModal = true;
-        } else {
-          this.handleGlobalError('Nenhum locador disponível para este imóvel.');
         }
       } catch (error) {
         this.handleGlobalError(error, 'Erro ao buscar locadores');
@@ -431,17 +448,18 @@ export default {
 
 
     confirmLocadorSelection() {
-      if (this.selectedLocadorId !== null) {
+      if (this.selectedLocadorId !== null && this.selectedLocatarioId) {
         const selectedLocador = this.locadoresModalList.find(locador => locador.id === this.selectedLocadorId);
+        const selectedLocatario = this.locatariosModalList.find(locatario => locatario.id === this.selectedLocatarioId);
         if (selectedLocador) {
           // Chamar a API para gerar o recibo com o ID do locador selecionado
-          this.generateReceipt(this.selectedImovelIdForReceipt, selectedLocador.id);
+          this.generateReceipt(this.selectedImovelIdForReceipt, selectedLocador.id,selectedLocatario.id);
           this.showLocadorModal = false;
         }
       }
     },
 
-    async generateReceipt(imovelId, locadorId) {
+    async generateReceipt(imovelId, locadorId,locatarioId) {
       try {
         const response = await axios.get(`/api/Document/gerarrecibo/${imovelId}`, {
           params: { locadorId }, // Passando o ID do locador como parâmetro
@@ -469,6 +487,7 @@ export default {
         // Após gerar o recibo, perguntar se deseja lançar no plano de contas
         this.selectedImovelIdForReceipt = imovelId;
         this.selectedLocadorIdForReceipt = locadorId;
+        this.selectedLocatarioIdForReceipt = locatarioId;
         this.showPlanoContasModal = true;
         
       } catch (error) {
@@ -478,7 +497,7 @@ export default {
 
     async confirmPlanoContas() {
       try {
-        const responseRequest = await axios.post(`/api/Conta/automatic/${this.selectedImovelIdForReceipt}?idClient=${this.selectedLocadorIdForReceipt}`);
+        const responseRequest = await axios.post(`/api/Conta/automatic/${this.selectedImovelIdForReceipt}?idLocador=${this.selectedLocadorIdForReceipt}?idLocatario=${this.selectedLocatarioIdForReceipt}`);
           if (responseRequest.status === 201) {
             this.showSnackBar('Lançamento no plano de contas realizado com sucesso!', 'success');
           } else {

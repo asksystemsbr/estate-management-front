@@ -28,7 +28,8 @@ const imovel = ref({
   diaVencimento: null,
   finalidade: '',
   ramoSeguro: '',
-  valor_caucao: 0
+  valor_caucao: 0,
+  semSeguro:'0'
   //fiadores: []
 });
 
@@ -61,7 +62,8 @@ function clearImovel() {
     diaVencimento: null,
     finalidade: '',
     ramoSeguro: '',
-    valor_caucao: 0
+    valor_caucao: 0,
+    semSeguro:'0'
     //fiadores: []
   };
 }

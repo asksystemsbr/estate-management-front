@@ -15,20 +15,9 @@
                 :error-messages="!validaImovel ? '' : 'Selecione uma imóvel válido'"
               ></v-select>
             </v-col>
-          </v-row>
-          <v-row  v-if="titulo ==='PAGAR'" align="center" justify="center">        
-              <v-col cols="12" md="12">
-              <v-select
-                v-model="selectedLocatarioId"
-                :items="locatariosDisponiveis"
-                label="Selecione um Locatário"
-                item-title="codigoLocatario"
-                item-value="id"  
-                :error-messages="!validaCliente ? '' : 'Selecione um Locatário válido'"     
-              ></v-select>
-            </v-col>
-          </v-row>     
-          <v-row v-if="titulo ==='RECEBER'" align="center" justify="center">        
+          </v-row>   
+          <!-- <v-row v-if="titulo ==='PAGAR'" align="center" justify="center">         -->
+          <v-row align="center" justify="center">        
               <v-col cols="12" md="12">
               <v-select
                 v-model="selectedLocadorId"
@@ -39,7 +28,20 @@
                 :error-messages="!validaCliente ? '' : 'Selecione um Locador válido'"     
               ></v-select>
             </v-col>
-          </v-row>                   
+          </v-row>
+          <!-- <v-row  v-if="titulo ==='RECEBER'" align="center" justify="center">         -->
+            <v-row  align="center" justify="center">                    
+              <v-col cols="12" md="12">
+              <v-select
+                v-model="selectedLocatarioId"
+                :items="locatariosDisponiveis"
+                label="Selecione um Locatário"
+                item-title="codigoLocatario"
+                item-value="id"  
+                :error-messages="!validaCliente ? '' : 'Selecione um Locatário válido'"     
+              ></v-select>
+            </v-col>
+          </v-row>                               
           <v-row align="center" justify="center">
             <v-col cols="12" md="12">
               <v-select
@@ -219,6 +221,7 @@ export default {
           contas.value.subCategoriaId = selectedSubCategoriaId.value;
           contas.value.formaPagamentoId = selectedTipoPagamentoId.value;          
           contas.value.ClienteId = selectedLocatarioId.value;
+          contas.value.locadorId = selectedLocadorId.value;
           contas.value.tipo = props.titulo;
 
           const responseRequest = await axios.post('/api/Conta', contas.value);
@@ -311,19 +314,19 @@ export default {
 
       // Carregar locatários ou locadores quando o imóvel for selecionado
       watch(selectedImovelId, async () => {
-        if (props.titulo === 'PAGAR') {
-          await fetchLocatarios();
-        } else if (props.titulo === 'RECEBER') {
+        //if (props.titulo === 'PAGAR') {
           await fetchLocadores();
-        }
+        //} else if (props.titulo === 'RECEBER') {
+          await fetchLocatarios();
+        //}
       });
 
       watch([selectedLocatarioId, selectedLocadorId], () => {
-        if (props.titulo === 'PAGAR') {
+        //if (props.titulo === 'PAGAR') {
           contas.value.ClienteId = selectedLocatarioId.value;
-        } else if (props.titulo === 'RECEBER') {
-          contas.value.ClienteId = selectedLocadorId.value;
-        }
+        //} else if (props.titulo === 'RECEBER') {
+          contas.value.locatarioId = selectedLocadorId.value;
+        //}
       });
 
     const limpar = () => {

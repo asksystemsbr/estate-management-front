@@ -16,19 +16,8 @@
               ></v-select>
             </v-col>
           </v-row>
-          <v-row  v-if="titulo ==='PAGAR'" align="center" justify="center">        
-              <v-col cols="12" md="12">
-              <v-select
-                v-model="selectedLocatarioId"
-                :items="locatariosDisponiveis"
-                label="Selecione um Locatário"
-                item-title="codigoLocatario"
-                item-value="id"  
-                :error-messages="!validaCliente ? '' : 'Selecione um Locatário válido'"     
-              ></v-select>
-            </v-col>
-          </v-row>     
-          <v-row v-if="titulo ==='RECEBER'" align="center" justify="center">        
+          <!-- <v-row v-if="titulo ==='PAGAR'" align="center" justify="center">         -->
+          <v-row align="center" justify="center">   
               <v-col cols="12" md="12">
               <v-select
                 v-model="selectedLocadorId"
@@ -39,7 +28,20 @@
                 :error-messages="!validaCliente ? '' : 'Selecione um Locador válido'"     
               ></v-select>
             </v-col>
-          </v-row>         
+          </v-row>   
+          <!-- <v-row  v-if="titulo ==='RECEBER'" align="center" justify="center">         -->
+          <v-row  align="center" justify="center">        
+              <v-col cols="12" md="12">
+              <v-select
+                v-model="selectedLocatarioId"
+                :items="locatariosDisponiveis"
+                label="Selecione um Locatário"
+                item-title="codigoLocatario"
+                item-value="id"  
+                :error-messages="!validaCliente ? '' : 'Selecione um Locatário válido'"     
+              ></v-select>
+            </v-col>
+          </v-row>           
           <v-row align="center" justify="center">        
               <v-col cols="12" md="12">
               <v-select
@@ -319,14 +321,15 @@
         contas.value.categoriaId = response.data.categoriaId;
         contas.value.subCategoriaId = response.data.subCategoriaId;
         contas.value.formaPagamentoId = response.data.formaPagamentoId;
-        contas.value.ClienteId = response.data.clienteId;
+        contas.value.locatarioId = response.data.clienteId;
+        contas.value.locadorId = response.data.locadorId;
 
         // Preencher o cliente selecionado
-        if (props.titulo === 'PAGAR') {
-          selectedLocatarioId.value = contas.value.ClienteId;
-        } else if (props.titulo === 'RECEBER') {
-          selectedLocadorId.value = contas.value.ClienteId;
-        }
+        //if (props.titulo === 'PAGAR') {
+          selectedLocadorId.value = contas.value.locadorId;
+        //} else if (props.titulo === 'RECEBER') {
+          selectedLocatarioId.value = contas.value.locatarioId;
+        //}
         //console.log('ID Situação Cliente:', response.data.iD_SITUACAO_CLIENTE);
       } catch (error) {
         emit('error', error); 
@@ -393,6 +396,13 @@
             emit('error', {error:'Registro inválido'}); 
           return;
         }
+
+            contas.value.ClienteId = selectedLocatarioId.value;
+            contas.value.locadorId = selectedLocadorId.value;
+            contas.value.categoriaId = selectedCategoriaId.value;
+            contas.value.subCategoriaId = selectedSubCategoriaId.value;
+            contas.value.imovelId = selectedImovelId.value;
+            contas.value.formaPagamentoId = selectedTipoPagamentoId.value;
             await axios.put(`/api/Conta/${props.tipoId}`, contas.value);
             clearContas();
             emit('update'); // Emitir evento para fechar a modal            
@@ -470,20 +480,20 @@
 
       // Carregar locatários ou locadores quando o imóvel for selecionado
       watch(selectedImovelId, async () => {
-        if (props.titulo === 'PAGAR') {
-          await fetchLocatarios();
-        } else if (props.titulo === 'RECEBER') {
+        //if (props.titulo === 'PAGAR') {
           await fetchLocadores();
-        }
+        //} else if (props.titulo === 'RECEBER') {
+          await fetchLocatarios();
+        //}
       });
 
-      watch([selectedLocatarioId, selectedLocadorId], () => {
-        if (props.titulo === 'PAGAR') {
-          contas.value.ClienteId = selectedLocatarioId.value;
-        } else if (props.titulo === 'RECEBER') {
-          contas.value.ClienteId = selectedLocadorId.value;
-        }
-      });
+      // watch([selectedLocatarioId, selectedLocadorId], () => {
+      //   //if (props.titulo === 'PAGAR') {
+      //     contas.value.ClienteId = selectedLocatarioId.value;
+      //   //} else if (props.titulo === 'RECEBER') {
+      //     contas.value.locadorId = selectedLocadorId.value;
+      //   //}
+      // });
 
       const confirmDelete = async (id) => {
         try {
@@ -515,7 +525,7 @@
       };
 
       const handleCategoriaSelectClick =() => {
-        this.fetchSubCategoria();
+        fetchSubCategoria();
       };
 
       const formattedDateEnd = computed(() => {
