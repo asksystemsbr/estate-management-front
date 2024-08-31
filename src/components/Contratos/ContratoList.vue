@@ -27,7 +27,7 @@
           <td class="text-left">{{ item.locatario }}</td>
           <td class="text-left">{{ item.locador }}</td>
           <td class="text-left">{{ item.logradouro }}</td>
-          <td class="text-left">{{ item.isFiador ? 'Sim' :'Não' }}</td>
+          <td class="text-left">{{ item.typeEnsurance }}</td>
           <td class="text-left">{{ item.dataVencimento }}</td>
           <td class="text-left">{{ item.typeContract }}</td>
         </tr>
@@ -73,7 +73,7 @@ data() {
     { title: 'Locatário', value: 'locatario' , sortable: true },
       { title: 'Locador', value: 'locador' , sortable: true },
       { title: 'Logradouro', value: 'logradouro' , sortable: true },
-      { title: 'Fiador', value: 'isFiador' , sortable: true },
+      { title: 'Tipo_Seguro', value: 'typeEnsurance' , sortable: true },
       { title: 'Vencimento', value: 'dataVencimento' , sortable: true },
       { title: 'Prazo', value: 'typeContract' , sortable: true },
     ],

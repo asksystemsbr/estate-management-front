@@ -210,7 +210,12 @@
             label="Valor Caução"
             type="number"
         ></v-text-field>
-
+        <v-checkbox
+          v-model="imovel.semSeguro"
+          label="Sem Seguro"
+          :true-value="'1'"
+          :false-value="'0'"
+        ></v-checkbox>
         <br>
         <h2>Fiadores</h2>
         <br>

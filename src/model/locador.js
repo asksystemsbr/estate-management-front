@@ -30,7 +30,8 @@ const locador = ref({
   limite_saldo: 0.0,
   obs: '',
   data_nascimento: null,
-  codigo_fiador: ''
+  codigo_fiador: '',
+  pasta: ''
 });
 
 function clearlocador() {
@@ -64,7 +65,8 @@ function clearlocador() {
     limite_saldo: 0.0,
     obs: '',
     data_nascimento: null,
-    codigo_fiador: ''
+    codigo_fiador: '',
+    pasta: ''
   };
 }
 

@@ -102,6 +102,11 @@
             label="Observações"
           ></v-textarea>
 
+          <v-text-field
+              v-model="locador.pasta"
+              label="Pasta"
+              required
+          ></v-text-field>
           <v-select
             v-model="locador.id_situacao_cliente"
             :items="situacoesCliente"

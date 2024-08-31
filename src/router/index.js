@@ -23,6 +23,7 @@ import ClientReport from '../components/Reports/Client/ClientReport.vue';
 import CashFlow from '../components/Reports/CashFlow/CashFlow.vue';
 import ChartAccountability from '../components/Reports/Accountability/ChartAccountability.vue';
 import ChartDemonstrativoAluguel from '../components/Reports/DemonstrativoAluguel/ChartDemonstrativoAluguel.vue';
+import ChartDimob from '../components/Reports/Dimob/ChartDIMOB.vue';
 //testes
 // import FuncionarioCreate from '../components/Funcionario/FuncionarioCreate.vue';
 // import FuncionarioEdit from '../components/Funcionario/FuncionarioEdit.vue';
@@ -186,6 +187,12 @@ const routes = [
     path: '/chartDemonstrativoAluguel',
     name: 'chartDemonstrativoAluguel',
     component: ChartDemonstrativoAluguel,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/chartDimob',
+    name: 'chartDimob',
+    component: ChartDimob,
     meta: { requiresAuth: true }
   },
   // {

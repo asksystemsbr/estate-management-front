@@ -126,7 +126,7 @@
             <td class="text-left">{{ item.locador }}</td>
             <td class="text-left">{{ item.logradouro }}</td>
             <td class="text-left">{{ item.valor }}</td>
-            <td class="text-left">{{ item.isFiador ? 'Sim' :'Não' }}</td>
+            <td class="text-left">{{ item.typeEnsurance}}</td>
             <td class="text-left">{{ item.dataVencimento }}</td>
             <td class="text-left">{{ item.typeContract }}</td>
             <td class="text-center">
@@ -261,7 +261,7 @@ export default {
         { title: 'Locador', value: 'locador' , sortable: true },
         { title: 'Logradouro', value: 'logradouro' , sortable: true },
         { title: 'Valor', value: 'valor' , sortable: true },
-        { title: 'Fiador', value: 'isFiador' , sortable: true },
+        { title: 'Tipo_Seguro', value: 'typeEnsurance' , sortable: true },
         { title: 'Vencimento', value: 'dataVencimento' , sortable: true },
         { title: 'Prazo', value: 'typeContract' , sortable: true },
         { title: 'Gerar', value: 'edit' , sortable: false },
