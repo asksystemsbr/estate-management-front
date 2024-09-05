@@ -92,6 +92,7 @@
             v-model="contas.valor"
             label="Valor"
             required
+             type="number"
             :rules="[v => !!v || 'Campo obrigatório']"
           ></v-text-field>
       <v-menu
