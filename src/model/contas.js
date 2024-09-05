@@ -3,7 +3,7 @@ import { ref } from 'vue';
 const contas = ref({
   id: 0,
   contaNome: '',
-  valor: 0.0,
+  valor: 0.00,
   tipo: '',
   dtVencimento: null,
   dtPgto: null,
@@ -21,7 +21,7 @@ function clearContas() {
   contas.value = {
     id: 0,
     contaNome: '',
-    valor: 0.0,
+    valor: 0.00,
     tipo: '',
     dtVencimento: null,
     dtPgto: null,
