@@ -61,7 +61,7 @@
           </template>    
           <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('ChartPayment')" link>Contas Pagar</v-list-item>
           <v-list-item v-if="userCan(['Conta.Read','Conta.Write'])" @click="navigateTo('ChartReceived')" link>Contas Receber</v-list-item>
-          <v-list-item v-if="userCan(['Cliente.Read','Cliente.Write'])" @click="navigateTo('ClientReport')" link>Clientes</v-list-item>
+          <v-list-item v-if="userCan(['Cliente.Read','Cliente.Write'])" @click="navigateTo('ClientReport')" link>Locadores</v-list-item>
           <v-list-item v-if="userCan(['ReportFinances.Read','ReportFinances.Write'])" @click="navigateTo('CashFlow')" link>Fluxo de Caixa</v-list-item>
           <v-list-item v-if="userCan(['PrestacaoContas.Read','PrestacaoContas.Write'])" @click="navigateTo('ChartAccountability')" link>Prestação de contas</v-list-item>
           <v-list-item v-if="userCan(['DemonstrativoAluguel.Read','DemonstrativoAluguel.Write'])" @click="navigateTo('ChartDemonstrativoAluguel')" link>Demonstrativo de aluguel</v-list-item>

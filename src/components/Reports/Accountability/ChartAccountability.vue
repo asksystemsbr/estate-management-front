@@ -12,7 +12,7 @@
               ></v-select>
             </v-col>
      </v-row> -->
-     <v-row  align="center" justify="center">        
+     <!-- <v-row  align="center" justify="center">        
       <v-col cols="12" md="12">
         <v-select
             v-model="selectedLocatarioId"
@@ -22,7 +22,18 @@
             item-value="id"  
         ></v-select>
       </v-col>
-      </v-row>       
+      </v-row>        -->
+      <v-row  align="center" justify="center">        
+      <v-col cols="12" md="12">
+        <v-select
+            v-model="selectedLocadorId"
+            :items="locadoresDisponiveis"
+            label="Selecione um Locador"
+            item-title="nomeLocador"
+            item-value="id"  
+        ></v-select>
+      </v-col>
+      </v-row>         
     <!-- Filtros de Data -->
     <v-row>
       <v-col>
@@ -168,10 +179,10 @@ export default {
       startDate: '', // Data de início do filtro
       endDate: '', // Data de fim do filtro
       imoveisDisponiveis: [],
-      locatariosDisponiveis: [],
+      locadoresDisponiveis: [],
       selectedImovelId: 0,
-      selectedLocatarioId: 0,
-      selectedLocatarioName: '',
+      selectedLocadorId: 0,
+      selectedLocadorName: '',
       snackbar: {
             show: false,
             message: '',
@@ -182,7 +193,7 @@ export default {
   },
   computed: {
     isFormValid() {
-      return this.selectedLocatarioId && this.startDate && this.endDate;
+      return this.selectedLocadorId && this.startDate && this.endDate;
     },
     filteredItems() {
         return this.receivedItems;
@@ -214,7 +225,7 @@ export default {
         const params = new URLSearchParams();
         if (this.startDate) params.append('StartDate', this.startDate);
         if (this.endDate) params.append('EndDate', this.endDate);
-        if (this.selectedLocatarioId) params.append('filterId', this.selectedLocatarioId);
+        if (this.selectedLocadorId) params.append('filterId', this.selectedLocadorId);
         //if (this.selectedImovelId) params.append('filterCod', this.selectedImovelId);
 
         // Supondo que exista uma API que retorne esses dados
@@ -241,11 +252,11 @@ export default {
     async fetchLocatarios () {
         try {
           //if (this.selectedImovelId) {
-            const response = await axios.get(`/api/Cliente`);
-            this.locatariosDisponiveis = response.data.map(locatario => ({
-              id: locatario.id,
-              nomeLocatario: locatario.nome,
-              codigoLocatario: locatario.codigo_cliente
+            const response = await axios.get(`/api/Locador`);
+            this.locadoresDisponiveis = response.data.map(locador => ({
+              id: locador.id,
+              nomeLocador: locador.nome,
+              codigoLocador: locador.codigo_locador
             }));
           //}
         } catch (error) {
@@ -259,8 +270,8 @@ export default {
                                                                       month: 'long',
                                                                       year: 'numeric'
                                                                     });
-        const selected = this.locatariosDisponiveis.find(locatario => locatario.id === this.selectedLocatarioId);
-        this.selectedLocatarioName = selected ? selected.codigoLocatario : '';
+        const selected = this.locadoresDisponiveis.find(locador => locador.id === this.selectedLocadorId);
+        this.selectedLocadorName = selected ? selected.codigoLocador : '';
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('DE MARCO CORRETORA DE IMÓVEIS');
 
@@ -291,7 +302,7 @@ export default {
           worksheet.getCell('B2').alignment = { horizontal: 'center' };
 
           worksheet.mergeCells('B5:F5');
-          worksheet.getCell('B5').value = this.selectedLocatarioName;
+          worksheet.getCell('B5').value = this.selectedLocadorName;
           worksheet.getCell('B5').font = { size: 15 };
           worksheet.getCell('B5').alignment = { horizontal: 'center' };
           // Dados de "Imóveis Recebidos"
@@ -466,7 +477,7 @@ export default {
             const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
             const link = document.createElement('a');
             link.href = URL.createObjectURL(blob);
-            link.download = `prestacao_contas_proprietarios_${this.selectedLocatarioName}.xlsx`;
+            link.download = `prestacao_contas_proprietarios_${this.selectedLocadorName}.xlsx`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -495,10 +506,10 @@ export default {
             doc.text('CRECI sp 184.317 - F', 140, 23, null, null, 'center');
             
             // Nome do Locatário Selecionado
-            const selected = this.locatariosDisponiveis.find(locatario => locatario.id === this.selectedLocatarioId);
-            this.selectedLocatarioName = selected ? selected.codigoLocatario : '';
+            const selected = this.locadoresDisponiveis.find(locador => locador.id === this.selectedLocadorId);
+            this.selectedLocadorName = selected ? selected.codigoLocador : '';
             doc.setFontSize(14);
-            doc.text(`Locatário: ${this.selectedLocatarioName}`, 140, 35, null, null, 'center');
+            doc.text(`Locador: ${this.selectedLocadorName}`, 140, 35, null, null, 'center');
 
             // Tabela de Imóveis Recebidos
             const headersReceived = [['IMÓVEL', 'LOCATÁRIO', 'VENCTO', 'PGTO', 'VALOR', 'M/J']];
@@ -554,7 +565,7 @@ export default {
             doc.text(`Araçariguama, ${currentDate}`, 140, finalYDiscounts + 40, null, null, 'center');
 
             // Salvar o PDF
-            doc.save(`prestacao_contas_proprietario_${this.selectedLocatarioName}.pdf`);
+            doc.save(`prestacao_contas_proprietario_${this.selectedLocadorName}.pdf`);
           } catch (error) {
             console.error("Erro ao gerar o PDF:", error);
             this.showSnackBar("Erro ao gerar o PDF", "error");
