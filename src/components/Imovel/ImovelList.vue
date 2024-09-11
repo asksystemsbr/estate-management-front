@@ -35,6 +35,8 @@
             <td class="text-left">{{ item.locador }}</td>
             <td class="text-left">{{ item.logradouro }}</td>
             <td class="text-left">{{ item.numero }}</td>
+            <td class="text-left">{{ item.dataReajuste }}</td>
+            <td class="text-left">{{ item.dataVencimento }}</td>
             <td class="text-left">{{ item.typeEnsurance }}</td>
             <td class="text-left">{{ item.typeContract }}</td>
             <td class="text-center">
@@ -124,6 +126,8 @@ export default {
         { title: 'Locador', value: 'locador' , sortable: true },
         { title: 'Logradouro', value: 'logradouro' , sortable: true },
         { title: 'Número', value: 'numero' , sortable: true },
+        { title: 'Dt. Reajuste', value: 'dataReajuste' , sortable: true },
+        { title: 'Vencimento', value: 'dataVencimento' , sortable: true },
         { title: 'Tipo_Seguro', value: 'typeEnsurance' , sortable: true },
         { title: 'Prazo', value: 'typeContract' , sortable: true },
         { title: 'Editar', value: 'edit' , sortable: false },

@@ -3,7 +3,7 @@
       <!-- Row for title and button -->
       <v-row align="center" justify="space-between">
         <v-col cols="auto">
-          <h1>Clientes</h1>
+          <h1>Locadores</h1>
         </v-col>
       </v-row>
       <br><br>
@@ -27,7 +27,7 @@
       >
         <template v-slot:item="{ item, index }">
           <tr :style="{ backgroundColor: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0' }">
-            <td class="text-left">{{ item.codigo_cliente }}</td>
+            <td class="text-left">{{ item.codigo_locador }}</td>
             <td class="text-left">{{ item.nome }}</td>
             <td class="text-left">{{ item.celular }}</td>
             <td class="text-left">{{ item.logradouro }}</td>
@@ -82,7 +82,7 @@ export default {
     return {
       clientes: [],
       headers: [
-      { title: 'Código', value: 'codigo_cliente' , sortable: true },
+      { title: 'Código', value: 'codigo_locador' , sortable: true },
         { title: 'Nome', value: 'nome' , sortable: true },        
         { title: 'Celular', value: 'celular' , sortable: true },
         { title: 'Logradouro', value: 'logradouro' , sortable: true },
@@ -119,7 +119,7 @@ export default {
   methods: {
     async fetchClients() {
       try {
-        const response = await axios.get('/api/Cliente/getItemsView');
+        const response = await axios.get('/api/Locador/getItemsView');
         this.clientes = response.data;
       } catch (error) {
         this.handleGlobalError(error, 'Erro ao buscar registro');
@@ -148,9 +148,9 @@ export default {
       this.showSnackBar(message,color);
     },
     exportToExcel() {
-        const title = `Relatório de Clientes`;
+        const title = `Relatório de Locadores`;
         const data = this.filteredItems.map(cliente => [
-        cliente.codigo_cliente,
+        cliente.codigo_locador,
         cliente.nome,
         cliente.celular,
         cliente.logradouro,
@@ -178,17 +178,17 @@ export default {
 
         // Criar e salvar o arquivo Excel
         const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Clientes');
-        XLSX.writeFile(wb, `clientes.xlsx`);
+        XLSX.utils.book_append_sheet(wb, ws, 'Locadores');
+        XLSX.writeFile(wb, `locadores.xlsx`);
       },
       exportToPDF() {
         const doc = new jsPDF('landscape');// Definir orientação horizontal
-        doc.text(`Relatório de Clientes`, 100, 20);
+        doc.text(`Relatório de Locadores`, 100, 20);
         doc.autoTable({
          startY: 30, // Definir posição de início da tabela
           head: [['Código', 'Nome','Celular', 'Logradouro', 'Num', 'Bairro', 'Situação']],
           body: this.filteredItems.map(cliente => [
-                cliente.codigo_cliente,
+                cliente.codigo_locador,
                 cliente.nome,
                 cliente.celular,
                 cliente.logradouro,
@@ -197,7 +197,7 @@ export default {
                 cliente.situacao
           ])
         });
-        doc.save(`clientes.pdf`);
+        doc.save(`locadores.pdf`);
       },
   }
 }

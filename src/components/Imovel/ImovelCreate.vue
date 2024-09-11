@@ -63,15 +63,6 @@
           </v-row>
           <br>
 
-          <!-- <v-select
-              v-model="imovel.locadorId"
-              :items="locadorCadastrado"
-              item-title="nome"
-              item-value="id"
-              label="Locador"
-              required
-          ></v-select>   -->
-
           <v-text-field
             v-model="imovel.logradouro"
             label="Logradouro"
@@ -124,7 +115,7 @@
 
           <v-text-field
             v-model="imovel.diaVencimento"
-            label="Vencimento"
+            label="Dia Vencimento"
             required
             type="number"
           ></v-text-field>
@@ -160,7 +151,30 @@
           ></v-date-picker>
       </v-menu>
 
-      <v-menu
+      <br>
+        <h2>Vencimentos</h2>
+        <br>
+        <v-row>
+          <v-col cols="12" sm="12" v-for="(vencimento, index) in vencimentos" :key="index">
+            <v-row>
+              <v-col cols="11" sm="11" >
+                <v-text-field
+                  v-model="vencimento.dataVencimento"
+                  label="Data de Vencimento"
+                  type="date"
+                ></v-text-field>
+             </v-col>
+             <v-col cols="1" sm="1" >              
+                <v-btn icon @click="removeVencimento(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+            </v-col>
+            </v-row>
+          </v-col>
+          <v-btn @click="addVencimento">Adicionar Vencimento</v-btn>
+        </v-row>
+        <br>
+      <!-- <v-menu
           ref="menu"
           v-model="menuOpen"
           :close-on-content-click="false"
@@ -183,7 +197,7 @@
             @update:modelValue ="handleDateChange"
             no-title
           ></v-date-picker>
-      </v-menu>
+      </v-menu> -->
 
           <v-text-field
             v-model="imovel.reajuste"
@@ -387,12 +401,20 @@ export default {
     const menuOpendtEntrada  = ref(false);
     const menuHoraInicioSeguroOpen  = ref(false);
     const fiadores=ref([]);
+    const vencimentos=ref([]);
     const locadores=ref([]);
     const locatarios=ref([]);
 
     const createImovel = async () => {
       if (form.value.validate()) {
+
+        if (vencimentos.value.length === 0) {
+          alert('Adicione pelo menos uma data de vencimento.');
+          return;
+        }
         try {
+          updateLastVencimento();
+
           console.log(imovel.value);
           imovel.value.horaInicioSeguro = formatHoraInicioSeguro(imovel.value.horaInicioSeguro);
           const response  = await axios.post('/api/Imovels', imovel.value);      
@@ -400,9 +422,11 @@ export default {
             console.log(fiadores.value) ;
             console.log(locadores.value) ;
             console.log(locatarios.value) ;
+            console.log(vencimentos.value) ;
             await axios.delete(`/api/Imovels/deleteimovelfiador/${imovel.value.id}`);   
             await axios.delete(`/api/Imovels/deleteimovelcliente/${imovel.value.id}`);   
             await axios.delete(`/api/Imovels/deleteimovellocador/${imovel.value.id}`);   
+            await axios.delete(`/api/Imovels/deleteimovelvencimento/${imovel.value.id}`);   
             if (Array.isArray(locadores.value) && locadores.value.length > 0) {
               for (const locador of locadores.value) {
                 const imovelLocador = {
@@ -435,6 +459,17 @@ export default {
                 };
                 // Enviar cada associação para o servidor
                 await axios.post('/api/Imovels/imovelfiador', imovelFiador);
+              }
+            }
+            if (Array.isArray(vencimentos.value) && vencimentos.value.length > 0) {
+              for (const vencimento of vencimentos.value) {
+                const imovelvencimento = {
+                  id:0,
+                  imovelId: createdImovel.id, 
+                  dataVencimento: vencimento.dataVencimento
+                };
+                // Enviar cada associação para o servidor
+                await axios.post('/api/Imovels/imovelvencimento', imovelvencimento);
               }
             }
             emit('update'); // Emitir evento para fechar a modal
@@ -542,12 +577,34 @@ export default {
     //       }) : '';
     // });
 
+    const updateLastVencimento = () => {
+      if (vencimentos.value.length > 0) {
+            // Encontra a maior data de vencimento no array
+          const maiorData = vencimentos.value.reduce((max, vencimento) => {
+            const currentDate = new Date(vencimento.dataVencimento);
+            return currentDate > max ? currentDate : max;
+          }, new Date(vencimentos.value[0].dataVencimento));
+
+          // Define a maior data encontrada como a data de vencimento do imóvel
+          imovel.value.dataVencimento = maiorData.toISOString().split('T')[0]; // Formata como 'yyyy-MM-dd'
+      } else {
+        imovel.value.dataVencimento = null;
+      }
+    };
+    const addVencimento = () => {
+      vencimentos.value.push({ dataVencimento: null });
+    };
+
+    const removeVencimento = (index) => {
+      vencimentos.value.splice(index, 1);
+    };
      const addFiador = () => {
       fiadores.value.push({ id: null });
     };
 
     const removeFiador = (index) => {
       fiadores.value.splice(index, 1);
+      updateLastVencimento(); 
     };
     const addLocador = () => {
       locadores.value.push({ id: null });
@@ -626,6 +683,8 @@ export default {
       menuOpenEndInsure,
       menuHoraInicioSeguroOpen,
       handleDateChange,
+      addVencimento,
+      removeVencimento,
       addFiador,
       removeFiador,
       addLocador,
@@ -640,6 +699,7 @@ export default {
       handleDateChangeDataEntrada,
       //formattedHoraInicioSeguro,
       handleTimeChange,
+      vencimentos,
       fiadores,
       locadores,
       locatarios,
