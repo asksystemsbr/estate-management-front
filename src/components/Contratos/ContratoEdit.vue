@@ -34,7 +34,7 @@
             <template v-slot:activator="{  attrs }">
               <v-text-field
                 v-model="formattedDateStart"
-                label="Data Inicial"
+                label="Data Inicial Reajuste"
                 prepend-icon="mdi-calendar"
                 readonly
                 v-bind="attrs"
@@ -61,7 +61,7 @@
           <template v-slot:activator="{  attrs }">
             <v-text-field
               v-model="formattedDateEnd"
-              label="Data Final"
+              label="Data Final Reajuste"
               prepend-icon="mdi-calendar"
               readonly
               v-bind="attrs"

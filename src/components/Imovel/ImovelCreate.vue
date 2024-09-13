@@ -150,31 +150,7 @@
             no-title
           ></v-date-picker>
       </v-menu>
-
-      <br>
-        <h2>Vencimentos</h2>
-        <br>
-        <v-row>
-          <v-col cols="12" sm="12" v-for="(vencimento, index) in vencimentos" :key="index">
-            <v-row>
-              <v-col cols="11" sm="11" >
-                <v-text-field
-                  v-model="vencimento.dataVencimento"
-                  label="Data de Vencimento"
-                  type="date"
-                ></v-text-field>
-             </v-col>
-             <v-col cols="1" sm="1" >              
-                <v-btn icon @click="removeVencimento(index)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-            </v-col>
-            </v-row>
-          </v-col>
-          <v-btn @click="addVencimento">Adicionar Vencimento</v-btn>
-        </v-row>
-        <br>
-      <!-- <v-menu
+      <v-menu
           ref="menu"
           v-model="menuOpen"
           :close-on-content-click="false"
@@ -197,7 +173,30 @@
             @update:modelValue ="handleDateChange"
             no-title
           ></v-date-picker>
-      </v-menu> -->
+      </v-menu>
+      <br>
+        <h2>Reajustes</h2>
+        <br>
+        <v-row>
+          <v-col cols="12" sm="12" v-for="(vencimento, index) in vencimentos" :key="index">
+            <v-row>
+              <v-col cols="11" sm="11" >
+                <v-text-field
+                  v-model="vencimento.dataVencimento"
+                  label="Data de Reajuste"
+                  type="date"
+                ></v-text-field>
+             </v-col>
+             <v-col cols="1" sm="1" >              
+                <v-btn icon @click="removeVencimento(index)">
+                  <v-icon>mdi-delete</v-icon>
+                </v-btn>
+            </v-col>
+            </v-row>
+          </v-col>
+          <v-btn @click="addVencimento">Adicionar Vencimento</v-btn>
+        </v-row>
+        <br>
 
           <v-text-field
             v-model="imovel.reajuste"
@@ -409,7 +408,7 @@ export default {
       if (form.value.validate()) {
 
         if (vencimentos.value.length === 0) {
-          alert('Adicione pelo menos uma data de vencimento.');
+          alert('Adicione pelo menos uma data de reajuste.');
           return;
         }
         try {
@@ -580,15 +579,15 @@ export default {
     const updateLastVencimento = () => {
       if (vencimentos.value.length > 0) {
             // Encontra a maior data de vencimento no array
-          const maiorData = vencimentos.value.reduce((max, vencimento) => {
-            const currentDate = new Date(vencimento.dataVencimento);
-            return currentDate > max ? currentDate : max;
-          }, new Date(vencimentos.value[0].dataVencimento));
+          // const maiorData = vencimentos.value.reduce((max, vencimento) => {
+          //   const currentDate = new Date(vencimento.dataVencimento);
+          //   return currentDate > max ? currentDate : max;
+          // }, new Date(vencimentos.value[0].dataVencimento));
 
           // Define a maior data encontrada como a data de vencimento do imóvel
-          imovel.value.dataVencimento = maiorData.toISOString().split('T')[0]; // Formata como 'yyyy-MM-dd'
+          //imovel.value.dataVencimento = maiorData.toISOString().split('T')[0]; // Formata como 'yyyy-MM-dd'
       } else {
-        imovel.value.dataVencimento = null;
+        //imovel.value.dataVencimento = null;
       }
     };
     const addVencimento = () => {
