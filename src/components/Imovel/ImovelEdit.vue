@@ -158,9 +158,33 @@
             no-title
           ></v-date-picker>
       </v-menu>
-
+      <v-menu
+            ref="menu"
+            v-model="menuOpen"
+            :close-on-content-click="false"
+            transition="scale-transition"
+            offset-y
+        >
+            <template v-slot:activator="{ on, attrs }">
+              {{ console.log('Activator on:', on) }}
+              <v-text-field
+                v-model="formattedDate"
+                label="Data de Vencimento"
+                prepend-icon="mdi-calendar"
+                readonly
+                v-bind="attrs"
+                @click="() => customClickHandler()" 
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="imovel.dataVencimento"
+              @input="handleDateChange"
+              @update:modelValue ="handleDateChange"
+              no-title
+            ></v-date-picker>
+        </v-menu>
       <br>
-        <h2>Vencimentos</h2>
+        <h2>Reajustes</h2>
         <br>
         <v-row>
           <v-col cols="12" sm="12" v-for="(vencimento, index) in vencimentos" :key="index">
@@ -168,7 +192,7 @@
               <v-col cols="11" sm="11" >
                 <v-text-field
                   v-model="vencimento.dataVencimento"
-                  label="Data de Vencimento"
+                  label="Data de Reajuste"
                   type="date"
                 ></v-text-field>
              </v-col>
@@ -181,33 +205,7 @@
           </v-col>
           <v-btn @click="addVencimento">Adicionar Vencimento</v-btn>
         </v-row>
-        <br>
-
-      <!-- <v-menu
-          ref="menu"
-          v-model="menuOpen"
-          :close-on-content-click="false"
-          transition="scale-transition"
-          offset-y
-      >
-          <template v-slot:activator="{ on, attrs }">
-            {{ console.log('Activator on:', on) }}
-            <v-text-field
-              v-model="formattedDate"
-              label="Data de Vencimento"
-              prepend-icon="mdi-calendar"
-              readonly
-              v-bind="attrs"
-              @click="() => customClickHandler()" 
-            ></v-text-field>
-          </template>
-          <v-date-picker
-            v-model="imovel.dataVencimento"
-            @input="handleDateChange"
-            @update:modelValue ="handleDateChange"
-            no-title
-          ></v-date-picker>
-      </v-menu> -->
+        <br>      
 
           <v-text-field
             v-model="imovel.reajuste"
@@ -470,7 +468,7 @@
     const updateImovel = async () => {
       try {
         if (vencimentos.value.length === 0) {
-          alert('Adicione pelo menos uma data de vencimento.');
+          alert('Adicione pelo menos uma data de reajuste.');
           return;
         }
         updateLastVencimento();
@@ -638,16 +636,16 @@
 
     const updateLastVencimento = () => {
       if (vencimentos.value.length > 0) {
-            // Encontra a maior data de vencimento no array
-          const maiorData = vencimentos.value.reduce((max, vencimento) => {
-            const currentDate = new Date(vencimento.dataVencimento);
-            return currentDate > max ? currentDate : max;
-          }, new Date(vencimentos.value[0].dataVencimento));
+          //   // Encontra a maior data de vencimento no array
+          // const maiorData = vencimentos.value.reduce((max, vencimento) => {
+          //   const currentDate = new Date(vencimento.dataVencimento);
+          //   return currentDate > max ? currentDate : max;
+          // }, new Date(vencimentos.value[0].dataVencimento));
 
-          // Define a maior data encontrada como a data de vencimento do imóvel
-          imovel.value.dataVencimento = maiorData.toISOString().split('T')[0]; // Formata como 'yyyy-MM-dd'
+          // // Define a maior data encontrada como a data de vencimento do imóvel
+          // imovel.value.dataVencimento = maiorData.toISOString().split('T')[0]; // Formata como 'yyyy-MM-dd'
       } else {
-        imovel.value.dataVencimento = null;
+        // imovel.value.dataVencimento = null;
       }
     };
     const addVencimento = () => {
