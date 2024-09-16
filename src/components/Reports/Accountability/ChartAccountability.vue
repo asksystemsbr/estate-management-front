@@ -276,7 +276,7 @@ export default {
         const worksheet = workbook.addWorksheet('DE MARCO CORRETORA DE IMÓVEIS');
 
         // Importar a imagem
-        const response = await fetch(require('@/assets/home.jpg'));
+        const response = await fetch(require('@/assets/home.png'));
         const imageBlob = await response.blob();
         const reader = new FileReader();
 
@@ -297,7 +297,7 @@ export default {
           worksheet.getCell('B1').alignment = { horizontal: 'center' };
           
           worksheet.mergeCells('B2:F2');
-          worksheet.getCell('B2').value = 'CRECI sp 184.317 - F';
+          worksheet.getCell('B2').value = 'CRECISP 42.709-J';
           worksheet.getCell('B2').font = { size: 12 };
           worksheet.getCell('B2').alignment = { horizontal: 'center' };
 
@@ -503,7 +503,7 @@ export default {
             doc.setFontSize(16);
             doc.text('DE MARCO CORRETORA DE IMÓVEIS', 140, 15, null, null, 'center');
             doc.setFontSize(12);
-            doc.text('CRECI sp 184.317 - F', 140, 23, null, null, 'center');
+            doc.text('CRECISP 42.709-J', 140, 23, null, null, 'center');
             
             // Nome do Locatário Selecionado
             const selected = this.locadoresDisponiveis.find(locador => locador.id === this.selectedLocadorId);
