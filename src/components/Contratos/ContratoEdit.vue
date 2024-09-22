@@ -450,12 +450,14 @@ export default {
 
 
     confirmLocadorSelection() {
-      if (this.selectedLocadorId !== null && this.selectedLocatarioId) {
+      //if (this.selectedLocadorId !== null && this.selectedLocatarioId) {
+      if (this.selectedLocadorId !== null) {
         const selectedLocador = this.locadoresModalList.find(locador => locador.id === this.selectedLocadorId);
-        const selectedLocatario = this.locatariosModalList.find(locatario => locatario.id === this.selectedLocatarioId);
+        //const selectedLocatario = this.locatariosModalList.find(locatario => locatario.id === this.selectedLocatarioId);
         if (selectedLocador) {
           // Chamar a API para gerar o recibo com o ID do locador selecionado
-          this.generateReceipt(this.selectedImovelIdForReceipt, selectedLocador.id,selectedLocatario.id);
+          //this.generateReceipt(this.selectedImovelIdForReceipt, selectedLocador.id,selectedLocatario.id);
+          this.generateReceipt(this.selectedImovelIdForReceipt, selectedLocador.id,0);
           this.showLocadorModal = false;
         }
       }
@@ -490,7 +492,7 @@ export default {
         this.selectedImovelIdForReceipt = imovelId;
         this.selectedLocadorIdForReceipt = locadorId;
         this.selectedLocatarioIdForReceipt = locatarioId;
-        this.showPlanoContasModal = true;
+        //this.showPlanoContasModal = true;
         
       } catch (error) {
         this.handleGlobalError(error, 'Erro ao gerar documento');
