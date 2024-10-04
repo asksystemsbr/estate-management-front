@@ -69,11 +69,10 @@
       <template v-slot:item="{ item, index }">        
         <tr :style="{ backgroundColor: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0' }">
             <td class="text-left">{{ item.imovel }}</td>
-            <td class="text-left">{{ item.locatario }}</td>
+            <td class="text-left" v-html="`${item.locatario} <br> ${item.locatarioObs}`"></td>
             <td class="text-left">{{ formatDate(item.dtVencimento) }}</td>
             <td class="text-left">{{ formatDate(item.dtPagamento) }}</td>
-            <td class="text-left">{{ formatCurrency(item.valorPago) }}</td>            
-            <td class="text-left">{{ formatCurrency(item.valorJuros) }}</td>                        
+            <td class="text-left">{{ formatCurrency(item.valorPago) }}</td>                              
         </tr>
       </template>
     </v-data-table>
@@ -165,7 +164,6 @@ export default {
         { title: 'Vencimento', value: 'dtVencimento', sortable: true },
         { title: 'Pgto', value: 'dtPagamento', sortable: true },
         { title: 'Valor', value: 'valorPago', sortable: true },
-        { title: 'M/J', value: 'valorJuros', sortable: true },
       ],
       // Headers para Adiantamentos
       headersDiscounts: [
@@ -183,6 +181,7 @@ export default {
       selectedImovelId: 0,
       selectedLocadorId: 0,
       selectedLocadorName: '',
+      selectedLocadorCodigo: '',
       snackbar: {
             show: false,
             message: '',
@@ -271,7 +270,8 @@ export default {
                                                                       year: 'numeric'
                                                                     });
         const selected = this.locadoresDisponiveis.find(locador => locador.id === this.selectedLocadorId);
-        this.selectedLocadorName = selected ? selected.codigoLocador : '';
+        this.selectedLocadorName = selected ? selected.nomeLocador : '';
+        this.selectedLocadorCodigo = selected ? selected.codigoLocador : '';
         const workbook = new ExcelJS.Workbook();
         const worksheet = workbook.addWorksheet('DE MARCO CORRETORA DE IMÓVEIS');
 
@@ -302,20 +302,19 @@ export default {
           worksheet.getCell('B2').alignment = { horizontal: 'center' };
 
           worksheet.mergeCells('B5:F5');
-          worksheet.getCell('B5').value = this.selectedLocadorName;
+          worksheet.getCell('B5').value = this.selectedLocadorCodigo;
           worksheet.getCell('B5').font = { size: 15 };
           worksheet.getCell('B5').alignment = { horizontal: 'center' };
           // Dados de "Imóveis Recebidos"
           worksheet.addRow([]);
           worksheet.mergeCells(`A${worksheet.lastRow.number}:F${worksheet.lastRow.number}`);
-          let headerRow = worksheet.addRow(['IMÓVEL', 'LOCATÁRIO', 'VENCTO', 'PGTO', 'VALOR', 'M/J']);
+          let headerRow = worksheet.addRow(['IMÓVEL', 'LOCATÁRIO', 'VENCTO', 'PGTO', 'VALOR']);
           worksheet.columns = [
             { key: 'imovel', width: 20 },
-            { key: 'locatario', width: 20 },
+            { key: 'locatario', width: 30 },
             { key: 'dtVencimento', width: 11 },
             { key: 'dtPagamento', width: 11 },
             { key: 'valorPago', width: 13 },
-            { key: 'valorJuros', width: 13 },
           ];
           worksheet.getRow(8).font = { bold: true };
           worksheet.getRow(8).alignment = { horizontal: 'center' };
@@ -334,13 +333,18 @@ export default {
           this.filteredItems.forEach((received) => {
             headerRow = worksheet.addRow([
               received.imovel,
-              received.locatario,
+              `${received.locatario}\n${received.locatarioObs}`,
               this.formatDate(received.dtVencimento),
               this.formatDate(received.dtPagamento),
-              this.formatCurrency(received.valorPago),
-              this.formatCurrency(received.valorJuros)
+              this.formatCurrency(received.valorPago)
             ]);
             
+            // Enable text wrapping for the second cell (locatario + locatarioObs)
+            worksheet.getCell(`B${headerRow.number}`).alignment = { wrapText: true };
+
+            // Set row height (for example, setting it to 40)
+            headerRow.height = 45;
+
             // Definindo bordas para a linha
             headerRow.eachCell((cell) => {
               cell.border = {
@@ -366,12 +370,11 @@ export default {
           //     };
           //   });  
 
-          headerRow =worksheet.addRow(['Subtotal Recebido', '', '', '', this.formatCurrency(this.reportData.totalPago), this.formatCurrency(this.reportData.totalMultaJuros)]);          
+          headerRow =worksheet.addRow(['Subtotal Recebido', '', '', '', this.formatCurrency(this.reportData.totalPago)]);          
           worksheet.mergeCells(`A${lastRow.number + 1}:D${lastRow.number + 1}`);
           worksheet.getCell(`A${lastRow.number + 1}`).alignment = { horizontal: 'left' };
           worksheet.getCell(`A${lastRow.number + 1}`).font = { bold: true };
-          worksheet.getCell(`E${lastRow.number + 1}`).font = { bold: true };
-          worksheet.getCell(`F${lastRow.number + 1}`).font = { bold: true };
+          worksheet.getCell(`E${lastRow.number + 1}`).font = { bold: true };          
           // Definindo bordas para a linha
           headerRow.eachCell((cell) => {
             cell.border = {
@@ -384,14 +387,14 @@ export default {
 
           // Dados de "Descontos"
          worksheet.addRow([]);
-          worksheet.mergeCells(`A${worksheet.lastRow.number}:F${worksheet.lastRow.number}`);
+          worksheet.mergeCells(`A${worksheet.lastRow.number}:E${worksheet.lastRow.number}`);
          
           //worksheet.addRow(['DESCRIÇÃO', 'VALOR']);
           //worksheet.getRow(worksheet.lastRow.number).font = { bold: true };
           //worksheet.getRow(worksheet.lastRow.number).alignment = { horizontal: 'center' };
           this.filteredPaid.forEach((paid) => {
-            headerRow = worksheet.addRow([paid.descricao,'','','','', this.formatCurrency(paid.valor)]);
-            worksheet.mergeCells(`A${worksheet.lastRow.number}:E${worksheet.lastRow.number}`);
+            headerRow = worksheet.addRow([paid.descricao,'','','', this.formatCurrency(paid.valor)]);
+            worksheet.mergeCells(`A${worksheet.lastRow.number}:D${worksheet.lastRow.number}`);
             // Definindo bordas para a linha
             headerRow.eachCell((cell) => {
               cell.border = {
@@ -417,11 +420,10 @@ export default {
           //   };
           // });
 
-          headerRow = worksheet.addRow(['SubTotal Descontos', '', '', '', '', this.formatCurrency(this.reportData.totalDiscounts)]);
-          worksheet.mergeCells(`A${worksheet.lastRow.number}:E${worksheet.lastRow.number}`);
+          headerRow = worksheet.addRow(['SubTotal Descontos', '', '', '', this.formatCurrency(this.reportData.totalDiscounts)]);
+          worksheet.mergeCells(`A${worksheet.lastRow.number}:D${worksheet.lastRow.number}`);
           worksheet.getCell(`A${worksheet.lastRow.number}`).alignment = { horizontal: 'left' };
           worksheet.getCell(`A${worksheet.lastRow.number}`).font = { bold: true };
-          worksheet.getCell(`F${worksheet.lastRow.number}`).font = { bold: true };
           // Definindo bordas para a linha
           headerRow.eachCell((cell) => {
             cell.border = {
@@ -432,7 +434,7 @@ export default {
             };
           });          
           headerRow = worksheet.addRow([]);
-          worksheet.mergeCells(`A${worksheet.lastRow.number}:F${worksheet.lastRow.number}`);
+          worksheet.mergeCells(`A${worksheet.lastRow.number}:E${worksheet.lastRow.number}`);
           // Definindo bordas para a linha
           headerRow.eachCell((cell) => {
             cell.border = {
@@ -443,11 +445,10 @@ export default {
             };
           });          
 
-          headerRow = worksheet.addRow(['Repasses proprietário', '', '', '', '', this.formatCurrency(this.reportData.totalRepass)]);
-          worksheet.mergeCells(`A${worksheet.lastRow.number}:E${worksheet.lastRow.number}`);
+          headerRow = worksheet.addRow(['Repasses proprietário', '', '', '', this.formatCurrency(this.reportData.totalRepass)]);
+          worksheet.mergeCells(`A${worksheet.lastRow.number}:D${worksheet.lastRow.number}`);
           worksheet.getCell(`A${worksheet.lastRow.number}`).alignment = { horizontal: 'left' };
           worksheet.getCell(`A${worksheet.lastRow.number}`).font = { bold: true };
-          worksheet.getCell(`F${worksheet.lastRow.number}`).font = { bold: true };
           // Definindo bordas para a linha
           headerRow.eachCell((cell) => {
             cell.border = {
@@ -459,18 +460,33 @@ export default {
           });          
 
           worksheet.addRow(['Recebi as quantias supracitadas, estando ciente dos descontos efetuados, os quais foram'
-          , '', '', '', '', '']);
-          worksheet.mergeCells(`A${worksheet.lastRow.number}:F${worksheet.lastRow.number}`);
+          , '', '', '', '']);
+          worksheet.mergeCells(`A${worksheet.lastRow.number}:E${worksheet.lastRow.number}`);
           worksheet.getCell(`A${worksheet.lastRow.number}`).alignment = { horizontal: 'center' };
           worksheet.addRow(['previamente  convencionados:'
-          , '', '', '', '', '']);
+          , '', '', '', '']);
           worksheet.mergeCells(`A${worksheet.lastRow.number}:F${worksheet.lastRow.number}`);
           worksheet.getCell(`A${worksheet.lastRow.number}`).alignment = { horizontal: 'center' };
           worksheet.addRow([]);
           worksheet.mergeCells(`A${worksheet.lastRow.number}:F${worksheet.lastRow.number}`);
-          worksheet.addRow([`Araçariguama, ${currentDate}`, '', '', '', '', '']);
+          worksheet.addRow([`Araçariguama, ${currentDate}`, '', '', '', '']);
           worksheet.mergeCells(`A${worksheet.lastRow.number}:F${worksheet.lastRow.number}`);
           worksheet.getCell(`A${worksheet.lastRow.number}`).alignment = { horizontal: 'center' };
+          worksheet.addRow([` `, '', '', '', '']);
+          worksheet.mergeCells(`A${worksheet.lastRow.number}:F${worksheet.lastRow.number}`);
+          worksheet.addRow([`${this.selectedLocadorName}`, '', '', '', '']);
+          worksheet.mergeCells(`A${worksheet.lastRow.number}:F${worksheet.lastRow.number}`);
+          worksheet.getCell(`A${worksheet.lastRow.number}`).alignment = { horizontal: 'center' };
+          worksheet.addRow([`_____________________________________________________________`, '', '', '', '']);
+          worksheet.mergeCells(`A${worksheet.lastRow.number}:F${worksheet.lastRow.number}`);
+          worksheet.getCell(`A${worksheet.lastRow.number}`).alignment = { horizontal: 'center' };
+          worksheet.addRow([` `, '', '', '', '']);
+          worksheet.addRow([` `, '', '', '', '']);
+          // worksheet.addRow(['BANCO ITAÚ', '', '', '', '']);
+          // worksheet.addRow(['AGÊNCIA 6374', '', '', '', '']);
+          // worksheet.addRow(['CAC 05.305-3', '', '', '', '']);
+          // worksheet.addRow(['CPF 113.673.618-26', '', '', '', '']);
+
 
           // Salvando o arquivo
           workbook.xlsx.writeBuffer().then((buffer) => {
@@ -507,19 +523,19 @@ export default {
             
             // Nome do Locatário Selecionado
             const selected = this.locadoresDisponiveis.find(locador => locador.id === this.selectedLocadorId);
-            this.selectedLocadorName = selected ? selected.codigoLocador : '';
+            this.selectedLocadorName = selected ? selected.nomeLocador : '';
+            this.selectedLocadorCodigo = selected ? selected.codigoLocador : '';
             doc.setFontSize(14);
-            doc.text(`Locador: ${this.selectedLocadorName}`, 140, 35, null, null, 'center');
+            doc.text(`Locador: ${this.selectedLocadorCodigo}`, 140, 35, null, null, 'center');
 
             // Tabela de Imóveis Recebidos
-            const headersReceived = [['IMÓVEL', 'LOCATÁRIO', 'VENCTO', 'PGTO', 'VALOR', 'M/J']];
+            const headersReceived = [['IMÓVEL', 'LOCATÁRIO', 'VENCTO', 'PGTO', 'VALOR']];
             const dataReceived = this.receivedItems.map(item => [
               item.imovel,
-              item.locatario,
+              `${item.locatario}\n${item.locatarioObs}`,
               this.formatDate(item.dtVencimento),
               this.formatDate(item.dtPagamento),
-              this.formatCurrency(item.valorPago),
-              this.formatCurrency(item.valorJuros)
+              this.formatCurrency(item.valorPago)
             ]);
 
             doc.autoTable({
@@ -562,7 +578,13 @@ export default {
             // Texto Final e Data
             doc.setFontSize(10);
             doc.text('Recebi as quantias supracitadas, estando ciente dos descontos efetuados, os quais foram previamente convencionados:', 140, finalYDiscounts + 30, null, null, 'center');
-            doc.text(`Araçariguama, ${currentDate}`, 140, finalYDiscounts + 40, null, null, 'center');
+            doc.text(`Araçariguama, ${currentDate}`, 140, finalYDiscounts + 35, null, null, 'center');
+            doc.text(`${this.selectedLocadorName}`, 140, finalYDiscounts + 40, null, null, 'center');
+            doc.text(`_____________________________________________________________`, 140, finalYDiscounts + 45, null, null, 'center');
+            // doc.text(`BANCO ITAÚ`, 140, finalYDiscounts + 40, null, null, 'center');
+            // doc.text(`AGÊNCIA 6374`, 140, finalYDiscounts + 40, null, null, 'center');
+            // doc.text(`CAC 05.305-3`, 140, finalYDiscounts + 40, null, null, 'center');
+            // doc.text(`CPF 113.673.618-26`, 140, finalYDiscounts + 40, null, null, 'center');
 
             // Salvar o PDF
             doc.save(`prestacao_contas_proprietario_${this.selectedLocadorName}.pdf`);
