@@ -128,6 +128,7 @@
             <td class="text-left">{{ item.valor }}</td>
             <td class="text-left">{{ item.typeEnsurance}}</td>
             <td class="text-left">{{ item.dataReajuste }}</td>
+            <td class="text-left">{{ item.indiceReajuste }}</td>
             <td class="text-left">{{ item.dataVencimento }}</td>
             <td class="text-left">{{ item.typeContract }}</td>
             <td class="text-center">
@@ -264,6 +265,7 @@ export default {
         { title: 'Valor', value: 'valor' , sortable: true },
         { title: 'Tipo_Seguro', value: 'typeEnsurance' , sortable: true },
         { title: 'Reajuste', value: 'dataReajuste' , sortable: true },
+        { title: 'Índice', value: 'indiceReajuste' , sortable: true },
         { title: 'Vencimento', value: 'dataVencimento' , sortable: true },
         { title: 'Prazo', value: 'typeContract' , sortable: true },
         { title: 'Gerar', value: 'edit' , sortable: false },

@@ -29,7 +29,8 @@ const imovel = ref({
   finalidade: '',
   ramoSeguro: '',
   valor_caucao: 0,
-  semSeguro:'0'
+  semSeguro:'0',
+  indiceReajuste: ''
   //fiadores: []
 });
 
@@ -63,7 +64,8 @@ function clearImovel() {
     finalidade: '',
     ramoSeguro: '',
     valor_caucao: 0,
-    semSeguro:'0'
+    semSeguro:'0',
+    indiceReajuste: ''
     //fiadores: []
   };
 }

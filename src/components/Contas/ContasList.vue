@@ -30,7 +30,7 @@
         
         <template v-slot:item="{ item, index }">
           <tr :style="{ backgroundColor: index % 2 === 0 ? '#f5f5f5' : '#e0e0e0' }">
-            <td class="text-left">{{ item.id }}</td>
+            <td class="text-left">{{ item.imovel }}</td>
             <td class="text-left">{{ item.contaNome }}</td>
             <td class="text-left">{{ formatCurrency(item.valor) }}</td>
             <td class="text-left">{{ formatDate(item.dtVencimento) }}</td>
@@ -124,7 +124,7 @@
       return {
         contas: [],
         headers: [
-          { title: 'Código', value: 'codigo', sortable: true },
+          { title: 'Imóvel', value: 'imovel', sortable: true },
           { title: 'Descrição', value: 'contaNome', sortable: true },
           { title: 'Valor', value: 'valor', sortable: true },
           { title: 'Vencimento', value: 'dtVencimento', sortable: true },
@@ -151,7 +151,7 @@
     methods: {
       async fetch() {
         try {
-          const response = await axios.get(`/api/Conta/GetByType/${this.titulo}`);
+          const response = await axios.get(`/api/Conta/getItemsView/${this.titulo}`);
           this.contas = response.data;
         } catch (error) {
           this.handleGlobalError(error, 'Failed to fetch register.');

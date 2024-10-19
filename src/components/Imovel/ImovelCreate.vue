@@ -198,6 +198,21 @@
         </v-row>
         <br>
 
+        <h2>Índice Reajuste</h2>
+        <br>
+        <v-row align="center" justify="center">
+            <v-col cols="12" md="12">
+              <v-select
+                v-model="selectedIndiceReajuste"
+                :items="indicesReajustes"
+                label="Selecione um índice"
+                item-title="descricao"
+                item-value="id"
+              ></v-select>
+            </v-col>
+          </v-row>   
+        <br>
+
           <v-text-field
             v-model="imovel.reajuste"
             label="Reajuste"
@@ -378,7 +393,7 @@
 </template>
 
 <script>
-import { ref, onMounted,computed } from 'vue';
+import { ref, onMounted,computed,watch } from 'vue';
 import axios from 'axios';
 import { VTimePicker } from 'vuetify/labs/VTimePicker'
 
@@ -403,6 +418,8 @@ export default {
     const vencimentos=ref([]);
     const locadores=ref([]);
     const locatarios=ref([]);
+    const indicesReajustes=ref([]);
+    const selectedIndiceReajuste = ref(0);
 
     const createImovel = async () => {
       if (form.value.validate()) {
@@ -478,6 +495,19 @@ export default {
       }
     };
 
+    const fetchReajuste =async () => {
+    try {
+          indicesReajustes.value = [
+            { id: 'IGPM', descricao: 'IGPM' },
+            { id: 'IVAR', descricao: 'IVAR' },
+            { id: 'IPCA', descricao: 'IPCA' },
+            { id: 'INPC', descricao: 'INPC' }
+          ];
+    } catch (error) {
+      emit('error', error);
+    }
+  };
+
     const fetchSituacaoCliente =async () => {
     try {
           const response = await axios.get(`/api/SituacaoImovel`);
@@ -528,11 +558,16 @@ export default {
     } catch (error) {
       emit('error', error);
     }
+
   };
+   watch([selectedIndiceReajuste], () => {
+          imovel.value.indiceReajuste = selectedIndiceReajuste.value;
+      });
 
   const limpar = () => {
       form.value.resetValidation();
       clearImovel();
+      selectedIndiceReajuste.value = 0;
     };
 
     const voltar = () => {
@@ -658,6 +693,7 @@ export default {
     await fetchCliente();
     await fetchFiador();
     await fetchLocador();
+    await fetchReajuste();
     limpar();
   };
 
@@ -702,7 +738,9 @@ export default {
       fiadores,
       locadores,
       locatarios,
-      formatHoraInicioSeguro
+      formatHoraInicioSeguro,
+      selectedIndiceReajuste,
+      indicesReajustes
     };
   }
 };
