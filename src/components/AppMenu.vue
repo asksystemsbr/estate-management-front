@@ -15,12 +15,12 @@
               ></v-list-item>
           </template>
           <!-- Subitens de Cadastros -->
+          <v-list-item v-if="userCan(['Locador.Read','Locador.Write'])" @click="navigateTo('Locador')" link>Locador</v-list-item>
           <v-list-item v-if="userCan(['Cliente.Read','Cliente.Write'])" @click="navigateTo('Cliente')" link>Locatário</v-list-item>
           <v-list-item v-if="userCan(['Fiador.Read','Fiador.Write'])" @click="navigateTo('Fiador')" link>Fiador</v-list-item>
-          <v-list-item v-if="userCan(['Funcionarios.Read','Funcionarios.Write'])" @click="navigateTo('Funcionario')" link>Funcionario</v-list-item>
-          <v-list-item v-if="userCan(['Locador.Read','Locador.Write'])" @click="navigateTo('Locador')" link>Locador</v-list-item>
-          <v-list-item v-if="userCan(['TipoPagamento.Read','TipoPagamento.Write'])" @click="navigateTo('TipoPagamento')" link>Tipos de Pagamentos</v-list-item>          
-          <v-list-item v-if="userCan(['Imovels.Read','Imovels.Write'])" @click="navigateTo('Imovel')" link> Imóveis</v-list-item>  
+          <v-list-item v-if="userCan(['Imovels.Read','Imovels.Write'])" @click="navigateTo('Imovel')" link> Imóveis</v-list-item>
+          <v-list-item v-if="userCan(['Funcionarios.Read','Funcionarios.Write'])" @click="navigateTo('Funcionario')" link>Funcionario</v-list-item>          
+          <v-list-item v-if="userCan(['TipoPagamento.Read','TipoPagamento.Write'])" @click="navigateTo('TipoPagamento')" link>Tipos de Pagamentos</v-list-item>                      
         </v-list-group>     
         
         <v-list-group value="Ferramentas">  

@@ -207,6 +207,21 @@
         </v-row>
         <br>      
 
+        <h2>Índice Reajuste</h2>
+        <br>
+        <v-row align="center" justify="center">
+            <v-col cols="12" md="12">
+              <v-select
+                v-model="selectedIndiceReajuste"
+                :items="indicesReajustes"
+                label="Selecione um índice"
+                item-title="descricao"
+                item-value="id"
+              ></v-select>
+            </v-col>
+          </v-row>   
+        <br>
+
           <v-text-field
             v-model="imovel.reajuste"
             label="Reajuste"
@@ -381,7 +396,7 @@
 
   
   <script>
-  import { ref,onMounted,nextTick,computed  } from 'vue';
+  import { ref,onMounted,nextTick,computed,watch  } from 'vue';
   import axios from 'axios';
   import { VTimePicker } from 'vuetify/labs/VTimePicker'
   
@@ -412,6 +427,8 @@
       const locadores=ref([]);
       const locatarios=ref([]);
       const vencimentos=ref([]);
+      const indicesReajustes=ref([]);
+      const selectedIndiceReajuste=ref(0);
 
       const fetchImovel = async () => {
       try {
@@ -420,6 +437,7 @@
         await fetchCliente();
         await fetchFiador();
         await fetchLocador();
+        await fetchReajuste();
         //console.log('Cliente:', clienteCadastrado.value);
         const response = await axios.get(`/api/Imovels/${props.id}`);
         console.log('Dados do imovel Recebidos:', response.data);
@@ -434,6 +452,7 @@
         //console.log ('Imovel data vencimento:', imovel.value.dataVencimento);
         //console.log('ID Situação Cliente:', response.data.iD_SITUACAO_CLIENTE);
 
+        selectedIndiceReajuste.value = imovel.value.indiceReajuste;
         //get fiadores by imovel
         const responseFiador = await axios.get(`/api/Imovels/getimovelfiador/${props.id}`);
           fiadores.value = responseFiador.data.map(fiador => ({
@@ -578,6 +597,19 @@
       }
     };
 
+    const fetchReajuste =async () => {
+    try {
+          indicesReajustes.value = [
+            { id: 'IGPM', descricao: 'IGPM' },
+            { id: 'IVAR', descricao: 'IVAR' },
+            { id: 'IPCA', descricao: 'IPCA' },
+            { id: 'INPC', descricao: 'INPC' }
+          ];
+    } catch (error) {
+      emit('error', error);
+    }
+  };
+
     const fetchLocador =async () => {
       try {
             const response = await axios.get(`/api/Locador`);
@@ -719,6 +751,10 @@
         return `${hora}:00`;
       }
 
+      watch([selectedIndiceReajuste], () => {
+          imovel.value.indiceReajuste = selectedIndiceReajuste.value;
+      });
+
       return {
         imovel,
         clearImovel,
@@ -760,7 +796,9 @@
         fiadores,
         locadores,
         locatarios,
-        formatHoraInicioSeguro
+        formatHoraInicioSeguro,
+        selectedIndiceReajuste,
+        indicesReajustes
       };
     }
   };
