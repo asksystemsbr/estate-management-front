@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <!-- <v-row align="center" justify="center">
+    <v-row align="center" justify="center">
             <v-col cols="12" md="12">
               <v-select
                 v-model="selectedImovelId"
@@ -11,7 +11,7 @@
                 :error-messages="!validaImovel ? '' : 'Selecione uma imóvel válido'"
               ></v-select>
             </v-col>
-     </v-row> -->
+     </v-row>
      <!-- <v-row  align="center" justify="center">        
       <v-col cols="12" md="12">
         <v-select
@@ -51,7 +51,8 @@
         ></v-text-field>
       </v-col>
       <v-col>
-        <v-btn color="primary" @click="fetchData" :disabled="!isFormValid">Buscar</v-btn>
+        <v-btn color="primary" @click="fetchData" :disabled="!isFormValid"  class="mr-2">Buscar</v-btn>
+        <v-btn color="secondary" @click="clearFilters">Limpar</v-btn>
       </v-col>
     </v-row>
 
@@ -192,7 +193,7 @@ export default {
   },
   computed: {
     isFormValid() {
-      return this.selectedLocadorId && this.startDate && this.endDate;
+      return (this.selectedLocadorId || this.selectedImovelId) && this.startDate && this.endDate;
     },
     filteredItems() {
         return this.receivedItems;
@@ -205,11 +206,12 @@ export default {
     // Chamada ao backend para obter os dados
     //this.fetchData();
     this.fetchLocatarios();
+    this.fetchImovel();
   },
   watch: {
     async selectedImovelId(newVal) {
       if (newVal) {
-        await this.fetchLocatarios();
+        //await this.fetchLocatarios();
       }
     }
     // async selectedLocatarioId(newVal) {
@@ -225,7 +227,7 @@ export default {
         if (this.startDate) params.append('StartDate', this.startDate);
         if (this.endDate) params.append('EndDate', this.endDate);
         if (this.selectedLocadorId) params.append('filterId', this.selectedLocadorId);
-        //if (this.selectedImovelId) params.append('filterCod', this.selectedImovelId);
+        if (this.selectedImovelId) params.append('filterCod', this.selectedImovelId);
 
         // Supondo que exista uma API que retorne esses dados
         const response = await axios.get(`/api/PrestacaoContas/getItemsView?${params.toString()}`);
@@ -262,6 +264,12 @@ export default {
           this.handleGlobalError(error, 'Erro ao buscar registro');
         }
     },
+    clearFilters() {
+    this.startDate = '';
+    this.endDate = '';
+    this.selectedImovelId = 0;
+    this.selectedLocadorId = 0;
+  },
     async exportToExcel() {
       try {
         const currentDate = new Date().toLocaleDateString('pt-BR', {
