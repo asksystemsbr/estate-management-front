@@ -1,5 +1,17 @@
 <template>
   <v-container>
+    <!-- <v-row align="center" justify="center">
+            <v-col cols="12" md="12">
+              <v-select
+                v-model="selectedImovelId"
+                :items="imoveisDisponiveis"
+                label="Selecione um Imóvel"
+                item-title="codigoImovel"
+                item-value="id"
+                :error-messages="!validaImovel ? '' : 'Selecione uma imóvel válido'"
+              ></v-select>
+            </v-col>
+     </v-row>     -->
     <v-row  align="center" justify="center">        
       <v-col cols="12" md="12">
         <v-select
@@ -246,7 +258,9 @@ export default {
       years: [],
       reportData: [],
       locadoresDisponiveis: [],
+      imoveisDisponiveis: [],
       selectedLocadorId: 0,
+      selectedImovelId: 0,
       selectedYear: null,
       snackbar: {
             show: false,
@@ -272,6 +286,7 @@ export default {
     //this.fetchData();
     this.fetchLocatarios();
     this.generateYearOptions();
+    this.fetchImovel();
   },
   // watch: {
   //   async selectedImovelId(newVal) {
@@ -306,12 +321,25 @@ export default {
           this.handleGlobalError(error, 'Erro ao buscar registro');
         }
     },
+    async fetchImovel () {
+      try {
+        const response = await axios.get(`/api/Imovels`);
+        this.imoveisDisponiveis = response.data.map(imovel => ({
+          id: imovel.id,
+          codigoImovel: imovel.codigoImovel,
+        }));
+      } catch (error) {
+        this.handleGlobalError(error, 'Erro ao buscar registro');
+      }
+    },
     async fetchData() {
       try {
         const params = new URLSearchParams({
           locadorId: this.selectedLocadorId,
           selectedYear: this.selectedYear
         });
+
+        // if (this.selectedImovelId) params.append('filterCod', this.selectedImovelId);
 
         const response = await axios.get(`/api/DemonstrativoAluguel/getItemsView?${params}`);
         const data = response.data;
